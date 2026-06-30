@@ -61,5 +61,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Known limitations:** team-scope still resolves broadly (refined when
   assignments land); Postgres RLS deferred to M11 (app-level scoping enforced now).
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/accounts` DB-backed, 200).
 - **Next:** M4 — Leads & opportunities (pipeline + kanban).
