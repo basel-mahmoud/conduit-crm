@@ -16,6 +16,9 @@ import {
   opportunities,
   organizations,
   permissions,
+  quotationLines,
+  quotationRevisions,
+  quotations,
   rolePermissions,
   roles,
   userRoles,
@@ -26,6 +29,7 @@ import { PERMISSION_DEFS, permissionDescription } from "@/server/rbac/permission
 import { SYSTEM_ROLES } from "@/server/rbac/roles";
 import type { AccountTypeKey, RatingKey } from "@/modules/accounts/labels";
 import { STAGE_META, type OppStageKey } from "@/modules/opportunities/labels";
+import { calcLineTotals, calcQuotation } from "@/modules/quotations/calc";
 
 const ORG = { name: "Conduit", slug: "conduit", currency: "AED" };
 
@@ -268,6 +272,117 @@ async function main() {
     );
   } else {
     console.log(`demo pipeline: skipped (${lc} leads exist)`);
+  }
+
+  // 9. Demo quotation (BOQ from OPP-0001), only when none exist yet
+  const [{ qc }] = await db
+    .select({ qc: count() })
+    .from(quotations)
+    .where(eq(quotations.orgId, org.id));
+  if (Number(qc) === 0) {
+    const [opp] = await db
+      .select({
+        id: opportunities.id,
+        name: opportunities.name,
+        accountId: opportunities.accountId,
+        projectType: opportunities.projectType,
+      })
+      .from(opportunities)
+      .where(
+        and(eq(opportunities.orgId, org.id), eq(opportunities.refNo, "OPP-0001")),
+      )
+      .limit(1);
+
+    if (opp) {
+      const demoLines = [
+        { sectionTitle: "BMS Controllers", description: "DDC controller, 32-point (Schneider)", qty: 12, unit: "nos", materialUnitCost: 3200, laborUnitCost: 400, engineeringUnitCost: 150, subcontractorUnitCost: 0, markupPct: 18 },
+        { sectionTitle: "BMS Controllers", description: "I/O expansion module, 16-point", qty: 24, unit: "nos", materialUnitCost: 850, laborUnitCost: 120, engineeringUnitCost: 40, subcontractorUnitCost: 0, markupPct: 18 },
+        { sectionTitle: "Field Devices", description: "Duct temperature sensor", qty: 60, unit: "nos", materialUnitCost: 180, laborUnitCost: 60, engineeringUnitCost: 0, subcontractorUnitCost: 0, markupPct: 20 },
+        { sectionTitle: "Field Devices", description: "Modulating control valve DN50 + actuator", qty: 18, unit: "nos", materialUnitCost: 1100, laborUnitCost: 150, engineeringUnitCost: 0, subcontractorUnitCost: 0, markupPct: 18 },
+        { sectionTitle: "Engineering & Commissioning", description: "BMS engineering, graphics & integration", qty: 1, unit: "lot", materialUnitCost: 0, laborUnitCost: 0, engineeringUnitCost: 45000, subcontractorUnitCost: 0, markupPct: 12 },
+        { sectionTitle: "Engineering & Commissioning", description: "Testing, commissioning & handover", qty: 1, unit: "lot", materialUnitCost: 0, laborUnitCost: 12000, engineeringUnitCost: 0, subcontractorUnitCost: 28000, markupPct: 12 },
+      ];
+      const totals = calcQuotation(demoLines, 0, 0.05);
+      const m = (v: number) => v.toFixed(2);
+
+      const [q] = await db
+        .insert(quotations)
+        .values({
+          orgId: org.id,
+          number: "QT-2026-0001",
+          title: opp.name,
+          opportunityId: opp.id,
+          accountId: opp.accountId,
+          projectType: opp.projectType,
+          status: "draft",
+          ownerId: OWNER.id,
+          createdBy: OWNER.id,
+          updatedBy: OWNER.id,
+        })
+        .returning();
+      const [rev] = await db
+        .insert(quotationRevisions)
+        .values({
+          orgId: org.id,
+          quotationId: q.id,
+          revNo: 0,
+          status: "draft",
+          vatRate: "0.0500",
+          materialCost: m(totals.materialCost),
+          laborCost: m(totals.laborCost),
+          engineeringCost: m(totals.engineeringCost),
+          subcontractorCost: m(totals.subcontractorCost),
+          totalCost: m(totals.totalCost),
+          subtotal: m(totals.subtotal),
+          discountAmount: m(totals.discountAmount),
+          netSubtotal: m(totals.netSubtotal),
+          vatAmount: m(totals.vatAmount),
+          grandTotal: m(totals.grandTotal),
+          marginAmount: m(totals.marginAmount),
+          marginPct: m(totals.marginPct),
+          createdBy: OWNER.id,
+        })
+        .returning();
+      await db
+        .update(quotations)
+        .set({ currentRevisionId: rev.id })
+        .where(eq(quotations.id, q.id));
+      await db.insert(quotationLines).values(
+        demoLines.map((l, i) => {
+          const lt = calcLineTotals(l);
+          return {
+            orgId: org.id,
+            revisionId: rev.id,
+            sectionTitle: l.sectionTitle,
+            sortOrder: i,
+            description: l.description,
+            qty: String(l.qty),
+            unit: l.unit,
+            materialUnitCost: m(l.materialUnitCost),
+            laborUnitCost: m(l.laborUnitCost),
+            engineeringUnitCost: m(l.engineeringUnitCost),
+            subcontractorUnitCost: m(l.subcontractorUnitCost),
+            markupPct: String(l.markupPct),
+            unitPrice: m(lt.unitPrice),
+            lineTotal: m(lt.lineTotal),
+          };
+        }),
+      );
+      await db
+        .update(numberSequences)
+        .set({ nextVal: 2 })
+        .where(
+          and(
+            eq(numberSequences.orgId, org.id),
+            eq(numberSequences.kind, "quotation"),
+          ),
+        );
+      console.log(
+        `demo quotation: QT-2026-0001 (${demoLines.length} lines, grand ${totals.grandTotal})`,
+      );
+    }
+  } else {
+    console.log(`demo quotation: skipped (${qc} exist)`);
   }
 
   console.log("✓ seed complete");

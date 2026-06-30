@@ -2,6 +2,28 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.5.0] — M5 Quotation Engine — 2026-06-30
+
+### Added
+- Quotations module (migration `0003`): quotations + revisions + BOQ lines +
+  discount approvals. Created from an opportunity (auto `QT-####`).
+- **Exact money math** in integer cents (`calc.ts`) — 4-way cost build-up
+  (material/labor/engineering/subcontractor), markup, margin, discount, VAT;
+  6 golden tests.
+- **BOQ builder**: live editable cost build-up with real-time totals + margin;
+  read-only price view for non-cost-viewers (the M2 field-level gate in action).
+- **Discount-approval workflow** (>5% needs management approval; gates send/approve).
+- Revisions (immutable once superseded; "New revision" clones the current).
+- Status workflow (draft → sent → won/lost) gated on discount approval.
+- **PDF generation** (`@react-pdf/renderer`) — professional customer-facing quote,
+  prices only (no cost/margin).
+- Demo seed: `QT-2026-0001`, a 6-line BMS BOQ (grand AED 231,769.86).
+- 34 Vitest tests total.
+
+### Verified
+- PDF route returns a valid `application/pdf` with exact totals
+  (231,769.86); builder renders the cost build-up with live margin.
+
 ## [0.4.0] — M4 Leads & Opportunities — 2026-06-30
 
 ### Added

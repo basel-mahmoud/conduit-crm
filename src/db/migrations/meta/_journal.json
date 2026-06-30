@@ -22,6 +22,13 @@
       "when": 1782830858131,
       "tag": "0002_normal_wasp",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1782849988308,
+      "tag": "0003_ancient_centennial",
+      "breakpoints": true
     }
   ]
 }

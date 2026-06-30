@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Check, Pencil, Trash2, X } from "lucide-react";
+import { ArrowLeft, Check, FileText, Pencil, Trash2, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,7 @@ import {
   deleteOpportunityAction,
   setStageAction,
 } from "@/modules/opportunities/actions";
+import { createQuotationFromOpportunityAction } from "@/modules/quotations/actions";
 import {
   APPROVAL_LABELS,
   APPROVAL_TONE,
@@ -42,6 +43,7 @@ export default async function OpportunityDetailPage({
   const activity = await opportunityActivity(ctx, id);
   const canEdit = can(ctx, "opportunity.update");
   const canDelete = can(ctx, "opportunity.delete");
+  const canQuote = can(ctx, "quotation.create");
   const isClosed = opp.stage === "won" || opp.stage === "lost";
 
   return (
@@ -96,6 +98,14 @@ export default async function OpportunityDetailPage({
                 </Button>
               </form>
             </>
+          )}
+          {canQuote && (
+            <form action={createQuotationFromOpportunityAction}>
+              <input type="hidden" name="opportunityId" value={opp.id} />
+              <Button type="submit" variant="outline" size="sm">
+                <FileText className="size-3.5" /> Create quotation
+              </Button>
+            </form>
           )}
           {canEdit && (
             <Button asChild variant="outline" size="sm">

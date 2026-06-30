@@ -87,3 +87,29 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/opportunities` + `/leads` DB-backed, 200).
 - **Next:** M5 — Quotation engine (BOQ, cost build-up, margin, approvals, PDF).
+
+---
+
+## M5 — Quotation Engine
+
+- **Date:** 2026-06-30
+- **Scope:** The crown jewel — BOQ quotations from opportunities, with exact
+  costing, margin, discount approvals, revisions, and PDF.
+- **Schema changes:** migration `0003` — `quotations`, `quotation_revisions`
+  (cached totals), `quotation_lines` (4-way cost build-up), `discount_approvals`.
+- **Logic:** `calc.ts` exact integer-cent math (6 golden tests); org-scoped RBAC +
+  audit service (create-from-opp, save revision + recompute, new revision/clone,
+  status workflow, discount approval); atomic `QT-####` numbering.
+- **UI:** quotations list; detail with the live **BOQ builder** (editable cost
+  build-up + margin for cost-viewers, read-only price view otherwise — the M2
+  field-level gate), discount-approval banner, revisions, activity; "Create
+  quotation" on opportunities.
+- **PDF:** `@react-pdf/renderer` customer quote (prices only) via
+  `/quotations/[id]/pdf` — verified valid PDF, exact totals.
+- **Security/testing:** 34 Vitest tests; cost/margin hidden from non-cost-viewers
+  and from the customer PDF; discounts >5% require approval before send.
+- **Known limitations:** email send is a follow-up (PDF download in place); line
+  drag-reorder not yet (section + order fields exist).
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M6 — Project execution (register won quote → project, milestones, snags).
