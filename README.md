@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Conduit
 
-## Getting Started
+**The control layer for systems integrators.** A production-grade, web-based CRM
+for a systems-integration & trading/contracting business operating across BMS,
+LCS, Home Automation, EMS, BTU metering, HVAC controls, ELV, trading, project
+contracting, AMC and PPM.
 
-First, run the development server:
+Conduit covers the full lifecycle — lead → opportunity → technical quotation →
+project execution → AMC/PPM & service operations — with the documents,
+approvals, permissions and numbers each stage actually demands.
+
+## Stack
+
+| Layer | Choice |
+|---|---|
+| Framework | Next.js 16 (App Router, RSC, Turbopack) · React 19 · TypeScript |
+| Styling | Tailwind v4 · CSS-variable design tokens · dark/light |
+| Database | Neon Postgres (pooled) · Drizzle ORM + Drizzle Kit |
+| Auth | Clerk (organizations) — *M2* |
+| Validation | Zod (shared client/server) |
+| Deploy | Vercel · GitHub |
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local   # fill in Neon (and later Clerk) values
+npm install
+npm run db:migrate           # apply migrations to Neon
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | Purpose |
+|---|---|
+| `npm run dev` | Dev server (Turbopack) |
+| `npm run build` / `start` | Production build / serve |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run lint` | ESLint (flat config) |
+| `npm run db:generate` | Generate SQL migration from schema |
+| `npm run db:migrate` | Apply migrations (direct/unpooled URL) |
+| `npm run db:studio` | Drizzle Studio |
+| `npm run db:seed` | Seed data |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Structure
 
-## Learn More
+```
+src/
+  app/                 # routes — (app) shell + dashboard, marketing landing
+  components/          # ui primitives, shell, marketing
+  db/                  # drizzle schema, migrations, seed
+  lib/                 # env, utils, nav
+docs/                  # design system, ADRs, (security/testing/api per milestone)
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project state
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See [progress.md](progress.md), [roadmap.md](roadmap.md),
+[changelog.md](changelog.md), [deployment-log.md](deployment-log.md) and
+[PRODUCTION-HARDENING.md](PRODUCTION-HARDENING.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Current milestone: **M1 — Foundation** ✅ · Next: **M2 — Auth, roles &
+permissions**.

@@ -1,26 +1,268 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: `dark:` utilities respond to a `.dark` ancestor
+   (next-themes toggles `.dark` on <html>). */
+@custom-variant dark (&:is(.dark *));
+
+/* ===============================================================
+   Conduit — design tokens · "Technical Command Center"
+   Raw values live in :root / .dark; semantic aliases below in @theme.
+   Premium, technical, trustworthy. No glow, no gratuitous gradients.
+   =============================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces — warm paper / clean ink */
+  --paper: #fafaf8;
+  --surface: #ffffff;
+  --surface-2: #f3f3ef;
+  --ink: #14171a;
+  --ink-2: #3b4148;
+  --muted: #6b7280;
+  --hairline: #e6e6e0;
+  --hairline-strong: #d6d6ce;
+
+  /* Brand + signal */
+  --brand: #1e63e9; /* controls blue */
+  --brand-ink: #ffffff;
+  --brand-weak: #eaf1fe;
+  --accent: #0ea5a0; /* instrument teal */
+  --success: #2fa36b;
+  --warning: #d9920a;
+  --danger: #e5484d;
+
+  /* shadcn-compatible semantic aliases */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-ink);
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--ink);
+  --muted-bg: var(--surface-2);
+  --muted-foreground: var(--muted);
+  --accent-fg: #ffffff;
+  --destructive: var(--danger);
+  --destructive-foreground: #ffffff;
+  --border: var(--hairline);
+  --input: var(--hairline-strong);
+  --ring: var(--brand);
+
+  /* Charts */
+  --chart-1: var(--brand);
+  --chart-2: var(--accent);
+  --chart-3: var(--warning);
+  --chart-4: #7c5cfc;
+  --chart-5: var(--success);
+
+  /* Sidebar — always a deep instrument panel, both themes */
+  --sidebar: #0e1116;
+  --sidebar-foreground: #c7ccd1;
+  --sidebar-muted: #8a929c;
+  --sidebar-border: #1c222b;
+  --sidebar-accent: #161b22;
+
+  /* Radius + elevation */
+  --radius: 0.5rem;
+  --shadow-sm: 0 1px 2px rgba(16, 18, 22, 0.06), 0 1px 1px rgba(16, 18, 22, 0.04);
+  --shadow-md: 0 4px 12px rgba(16, 18, 22, 0.08), 0 2px 4px rgba(16, 18, 22, 0.04);
+  --shadow-lg: 0 12px 32px rgba(16, 18, 22, 0.12), 0 4px 8px rgba(16, 18, 22, 0.06);
+}
+
+.dark {
+  --paper: #0b0d10;
+  --surface: #111419;
+  --surface-2: #171b21;
+  --ink: #e8eaed;
+  --ink-2: #b4b9c0;
+  --muted: #8a929c;
+  --hairline: #20262e;
+  --hairline-strong: #2a313a;
+
+  --brand: #4c8dff;
+  --brand-ink: #08111f;
+  --brand-weak: #12243f;
+  --accent: #2dd4cf;
+  --success: #3fbe82;
+  --warning: #f0b429;
+  --danger: #ff6369;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-ink);
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--ink);
+  --muted-bg: var(--surface-2);
+  --muted-foreground: var(--muted);
+  --accent-fg: #04201f;
+  --destructive: var(--danger);
+  --destructive-foreground: #1a0708;
+  --border: var(--hairline);
+  --input: var(--hairline-strong);
+  --ring: var(--brand);
+
+  --sidebar: #0a0c10;
+  --sidebar-foreground: #c7ccd1;
+  --sidebar-muted: #828a94;
+  --sidebar-border: #181d24;
+  --sidebar-accent: #12161c;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted-bg);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-fg);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-brand-weak: var(--brand-weak);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent: var(--sidebar-accent);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  /* Tabular, slashed-zero numerics for the mono "instrument" data
+     (quote numbers, model numbers, money). The signature of the system. */
+  .font-mono,
+  .tabular {
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--brand) 24%, transparent);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Hairline ring used across cards/inputs for crisp 1px definition. */
+  .ring-hairline {
+    box-shadow: inset 0 0 0 1px var(--color-border);
+  }
+}
+
+/* ===============================================================
+   Marketing / control-schematic motion
+   CSS-driven (off main thread), reduced-motion safe.
+   =============================================================== */
+@keyframes conduit-signal {
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+@keyframes conduit-core {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px var(--brand-weak), 0 0 26px -10px var(--brand);
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--brand), 0 0 52px -8px var(--brand);
+  }
+}
+@keyframes conduit-blink {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.signal {
+  stroke-dasharray: 14 226;
+  animation: conduit-signal 2.6s linear infinite;
+}
+.core-glow {
+  animation: conduit-core 3.4s ease-in-out infinite;
+}
+.node-dot {
+  animation: conduit-blink 2.6s ease-in-out infinite;
+}
+.rise {
+  opacity: 0;
+  animation: rise-in 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal,
+  .core-glow,
+  .node-dot {
+    animation: none;
+  }
+  .rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
