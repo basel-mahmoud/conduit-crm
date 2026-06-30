@@ -2,6 +2,25 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.3.0] — M3 Customer Database — 2026-06-30
+
+### Added
+- Accounts module (8 account types) + contacts: schema (`accounts`, `contacts`),
+  migration `0001`, org-scoped service with RBAC guard + tamper-evident audit on
+  every mutation, and activity-timeline events — all in one transaction.
+- Server actions (create / update / soft-delete account, add contact) with Zod
+  validation at the boundary.
+- UI: accounts list (search + type filter chips), detail (company info, contacts,
+  activity timeline), create + edit forms, delete. Reusable form primitives
+  (input/select/textarea/field) and account badges.
+- Idempotent demo seed: 8 GCC accounts + 3 contacts.
+- 5 Vitest tests for account validation (20 total, all green).
+
+### Verified
+- End-to-end against Neon: create → activity event + audit chain entry
+  (`seq 1`, `prev_hash null`); soft-delete → chain links (`account.create`,
+  `account.delete`). Tenant-scoped reads, permission-gated writes.
+
 ## [0.2.0] — M2 Auth & RBAC — 2026-06-30
 
 ### Added

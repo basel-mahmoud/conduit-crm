@@ -4,3 +4,5 @@ export * from "./users";
 export * from "./rbac";
 export * from "./audit";
 export * from "./sequences";
+export * from "./accounts";
+export * from "./contacts";

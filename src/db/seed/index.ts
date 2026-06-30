@@ -5,10 +5,12 @@
  * with their grants, an owner/admin user (used by the dev-auth fallback until
  * Clerk is wired), and the document-number sequences.
  */
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import {
+  accounts,
+  contacts,
   numberSequences,
   organizations,
   permissions,
@@ -19,6 +21,7 @@ import {
 } from "@/db/schema";
 import { PERMISSION_DEFS, permissionDescription } from "@/server/rbac/permissions";
 import { SYSTEM_ROLES } from "@/server/rbac/roles";
+import type { AccountTypeKey, RatingKey } from "@/modules/accounts/labels";
 
 const ORG = { name: "Conduit", slug: "conduit", currency: "AED" };
 
@@ -136,6 +139,57 @@ async function main() {
       target: [numberSequences.orgId, numberSequences.kind],
     });
   console.log(`sequences: ${SEQUENCES.length}`);
+
+  // 7. Demo accounts + contacts (only when the org has none yet)
+  const [{ c }] = await db
+    .select({ c: count() })
+    .from(accounts)
+    .where(eq(accounts.orgId, org.id));
+
+  if (Number(c) === 0) {
+    const demo: {
+      name: string;
+      type: AccountTypeKey;
+      city: string;
+      email: string;
+      industry: string;
+      rating: RatingKey;
+      website?: string;
+      phone?: string;
+    }[] = [
+      { name: "Emaar Properties", type: "developer", city: "Dubai", email: "projects@emaar.ae", industry: "Real Estate", rating: "a", website: "emaar.com", phone: "+971 4 366 1688" },
+      { name: "Dubai Municipality", type: "end_user", city: "Dubai", email: "info@dm.gov.ae", industry: "Government", rating: "a" },
+      { name: "WSP Middle East", type: "consultant", city: "Dubai", email: "mep@wsp.com", industry: "MEP Consultancy", rating: "a", website: "wsp.com" },
+      { name: "ALEC Engineering", type: "contractor", city: "Dubai", email: "info@alec.ae", industry: "Main Contractor", rating: "b" },
+      { name: "Khansaheb Facilities Management", type: "fm", city: "Dubai", email: "fm@khansaheb.ae", industry: "Facility Management", rating: "b" },
+      { name: "Drake & Scull MEP", type: "mep", city: "Abu Dhabi", email: "info@drakescull.com", industry: "MEP Contractor", rating: "c" },
+      { name: "Schneider Electric", type: "brand_partner", city: "Dubai", email: "gulf@se.com", industry: "BMS / Controls", rating: "a", website: "se.com" },
+      { name: "Honeywell Building Technologies", type: "supplier", city: "Dubai", email: "buildings@honeywell.com", industry: "BMS / Controls", rating: "a", website: "honeywell.com" },
+    ];
+
+    const inserted = await db
+      .insert(accounts)
+      .values(
+        demo.map((d) => ({
+          ...d,
+          orgId: org.id,
+          ownerId: OWNER.id,
+          createdBy: OWNER.id,
+          updatedBy: OWNER.id,
+        })),
+      )
+      .returning({ id: accounts.id });
+
+    await db.insert(contacts).values([
+      { orgId: org.id, accountId: inserted[0].id, firstName: "Omar", lastName: "Al Futtaim", title: "Projects Director", email: "omar@emaar.ae", isPrimary: true, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, accountId: inserted[2].id, firstName: "Sarah", lastName: "Khan", title: "Senior MEP Engineer", email: "sarah.khan@wsp.com", isPrimary: true, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, accountId: inserted[6].id, firstName: "Rajesh", lastName: "Menon", title: "BMS Specialist", email: "rajesh.menon@se.com", isPrimary: true, createdBy: OWNER.id, updatedBy: OWNER.id },
+    ]);
+
+    console.log(`demo accounts: ${inserted.length} (+3 contacts)`);
+  } else {
+    console.log(`demo accounts: skipped (${c} exist)`);
+  }
 
   console.log("✓ seed complete");
 }

@@ -8,7 +8,7 @@ Standing production-readiness standard, tracked per item. Legend:
 ## Security
 | Item | Status | Notes |
 |---|---|---|
-| Input sanitization & injection prevention | 🟡 | Zod at boundaries; Drizzle parameterized queries (no raw SQL in app). Full coverage as endpoints land. |
+| Input sanitization & injection prevention | ✅ | Zod at every action boundary; Drizzle parameterized queries (no raw SQL); soft-delete. |
 | Authentication | 🟡 | Clerk wired & gated; dev-auth fallback active until keys provisioned. |
 | Authorization · roles & permissions (least privilege) | ✅ | 48-perm catalog, 11 roles, scoped guard + field-level cost gate; unit-tested. |
 | Session management & token expiry | ⏳ M2 | Clerk sessions. |
@@ -17,7 +17,7 @@ Standing production-readiness standard, tracked per item. Legend:
 | Encryption at rest | 🏗 | Neon-managed. |
 | Rate limiting & abuse prevention | ⏳ M2/M11 | Upstash on auth/AI/export/upload. |
 | Dependency scanning & patching | 🟡 | `npm audit` reviewed; CI gate + Dependabot in M11. |
-| Multi-tenancy & data isolation | 🟡 | `org_id` on every table; repo scoping + RLS in M2. |
+| Multi-tenancy & data isolation | 🟡 | `org_id` on every table; service queries enforce org scope (verified); Postgres RLS deferred to M11. |
 | PII handling · retention · deletion | ⏳ M11 | Policy + erasure workflow. |
 | Audit trails & tamper-evident logging | ✅ | sha256 hash chain, per-org advisory lock, in-transaction writer + verifier; unit-tested. |
 | Security headers (CSP/HSTS/X-Frame-Options) | ⏳ M2 | Set in `next.config` / proxy. |

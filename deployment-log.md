@@ -42,3 +42,24 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/admin` DB-backed, 200).
 - **Next:** M3 — Accounts & contacts (8 account types).
+
+---
+
+## M3 — Customer Database
+
+- **Date:** 2026-06-30
+- **Scope:** Accounts (8 types) + contacts — first real CRM module with full CRUD.
+- **Schema changes:** migration `0001` — `accounts` (8-type enum, rating, status,
+  address, owner), `contacts` (applied to Neon).
+- **Logic:** org-scoped service (tenant isolation), RBAC-guarded + audit-logged
+  mutations in transactions, activity-timeline events, Zod validation, server actions.
+- **UI:** accounts list (search + type filter), detail (info/contacts/activity),
+  create + edit forms, soft-delete; reusable form primitives + badges.
+- **Data:** idempotent demo seed — 8 GCC accounts + 3 contacts.
+- **Security/testing:** 20 Vitest tests (added account validation); create/delete
+  verified end-to-end against Neon incl. audit hash-chain links.
+- **Known limitations:** team-scope still resolves broadly (refined when
+  assignments land); Postgres RLS deferred to M11 (app-level scoping enforced now).
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M4 — Leads & opportunities (pipeline + kanban).
