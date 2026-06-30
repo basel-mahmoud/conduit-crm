@@ -15,6 +15,13 @@
       "when": 1782829523079,
       "tag": "0001_brave_tigra",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782830858131,
+      "tag": "0002_normal_wasp",
+      "breakpoints": true
     }
   ]
 }

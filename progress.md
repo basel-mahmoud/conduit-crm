@@ -10,8 +10,8 @@ Living status tracker. Updated every milestone.
 | M1 | Foundation: Next 16 + TS + Tailwind v4, Neon+Drizzle, design system, app shell, landing | ✅ Done |
 | M2 | Auth, roles, organizations, RBAC, audit | ✅ Done |
 | M3 | Accounts & contacts (8 account types) | ✅ Done |
-| M4 | Leads & opportunities (+ kanban) | ⏭ Next |
-| M5 | Quotation engine + approvals + PDF | ◻ Planned |
+| M4 | Leads & opportunities (+ kanban) | ✅ Done |
+| M5 | Quotation engine + approvals + PDF | ⏭ Next |
 | M6 | Project execution | ◻ Planned |
 | M7 | AMC / PPM / service | ◻ Planned |
 | M8 | Inventory & equipment | ◻ Planned |

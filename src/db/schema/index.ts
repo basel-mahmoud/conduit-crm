@@ -6,3 +6,5 @@ export * from "./audit";
 export * from "./sequences";
 export * from "./accounts";
 export * from "./contacts";
+export * from "./leads";
+export * from "./opportunities";

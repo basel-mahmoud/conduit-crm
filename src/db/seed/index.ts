@@ -5,13 +5,15 @@
  * with their grants, an owner/admin user (used by the dev-auth fallback until
  * Clerk is wired), and the document-number sequences.
  */
-import { count, eq } from "drizzle-orm";
+import { and, count, eq } from "drizzle-orm";
 
 import { db } from "@/db";
 import {
   accounts,
   contacts,
+  leads,
   numberSequences,
+  opportunities,
   organizations,
   permissions,
   rolePermissions,
@@ -19,9 +21,11 @@ import {
   userRoles,
   users,
 } from "@/db/schema";
+import type { NewLead, NewOpportunity } from "@/db/schema";
 import { PERMISSION_DEFS, permissionDescription } from "@/server/rbac/permissions";
 import { SYSTEM_ROLES } from "@/server/rbac/roles";
 import type { AccountTypeKey, RatingKey } from "@/modules/accounts/labels";
+import { STAGE_META, type OppStageKey } from "@/modules/opportunities/labels";
 
 const ORG = { name: "Conduit", slug: "conduit", currency: "AED" };
 
@@ -189,6 +193,81 @@ async function main() {
     console.log(`demo accounts: ${inserted.length} (+3 contacts)`);
   } else {
     console.log(`demo accounts: skipped (${c} exist)`);
+  }
+
+  // 8. Demo leads + opportunities (only when the org has none yet)
+  const [{ lc }] = await db
+    .select({ lc: count() })
+    .from(leads)
+    .where(eq(leads.orgId, org.id));
+  if (Number(lc) === 0) {
+    const accs = await db
+      .select({ id: accounts.id, name: accounts.name })
+      .from(accounts)
+      .where(eq(accounts.orgId, org.id));
+    const byName = (n: string) => accs.find((x) => x.name === n)?.id ?? null;
+
+    const demoLeads: Omit<
+      NewLead,
+      "orgId" | "ownerId" | "createdBy" | "updatedBy"
+    >[] = [
+      { refNo: "LEAD-0001", source: "tender", status: "new", projectType: "bms", projectName: "Sobha Hartland — BMS tender", projectLocation: "MBR City, Dubai", estValue: "3200000", accountId: null },
+      { refNo: "LEAD-0002", source: "referral", status: "contacted", projectType: "hvac_controls", projectName: "Aldar HQ — HVAC controls", projectLocation: "Abu Dhabi", estValue: "1400000", accountId: byName("Dubai Municipality") },
+      { refNo: "LEAD-0003", source: "website", status: "qualified", projectType: "lcs", projectName: "JBR Towers — lighting retrofit", projectLocation: "JBR, Dubai", estValue: "760000", accountId: byName("Emaar Properties") },
+      { refNo: "LEAD-0004", source: "consultant", status: "new", projectType: "ems", projectName: "Yas Mall — EMS", projectLocation: "Abu Dhabi", estValue: "2900000", accountId: byName("ALEC Engineering") },
+    ];
+    await db.insert(leads).values(
+      demoLeads.map((l) => ({
+        ...l,
+        orgId: org.id,
+        ownerId: OWNER.id,
+        createdBy: OWNER.id,
+        updatedBy: OWNER.id,
+      })),
+    );
+    await db
+      .update(numberSequences)
+      .set({ nextVal: demoLeads.length + 1 })
+      .where(
+        and(eq(numberSequences.orgId, org.id), eq(numberSequences.kind, "lead")),
+      );
+
+    const demoOpps: Omit<
+      NewOpportunity,
+      "orgId" | "ownerId" | "createdBy" | "updatedBy" | "probability"
+    >[] = [
+      { refNo: "OPP-0001", name: "DIFC Tower 2 — BMS & HVAC controls", stage: "commercial", projectType: "bms", value: "2400000", accountId: byName("Emaar Properties") },
+      { refNo: "OPP-0002", name: "Dubai Municipality HQ — EMS upgrade", stage: "technical", projectType: "ems", value: "1150000", accountId: byName("Dubai Municipality") },
+      { refNo: "OPP-0003", name: "Bluewaters — BTU metering", stage: "budgetary", projectType: "btu", value: "680000", accountId: byName("ALEC Engineering") },
+      { refNo: "OPP-0004", name: "City Walk — lighting control", stage: "negotiation", projectType: "lcs", value: "1950000", accountId: byName("Emaar Properties") },
+      { refNo: "OPP-0005", name: "Expo Pavilion — ELV integration", stage: "qualified", projectType: "elv", value: "540000", accountId: byName("Khansaheb Facilities Management") },
+      { refNo: "OPP-0006", name: "Palm Villas — home automation", stage: "awaiting_po", projectType: "home_automation", value: "2100000", accountId: byName("Dubai Municipality") },
+    ];
+    await db.insert(opportunities).values(
+      demoOpps.map((o) => ({
+        ...o,
+        orgId: org.id,
+        ownerId: OWNER.id,
+        createdBy: OWNER.id,
+        updatedBy: OWNER.id,
+        probability: STAGE_META[o.stage as OppStageKey].probability,
+      })),
+    );
+    await db
+      .update(numberSequences)
+      .set({ nextVal: demoOpps.length + 1 })
+      .where(
+        and(
+          eq(numberSequences.orgId, org.id),
+          eq(numberSequences.kind, "opportunity"),
+        ),
+      );
+
+    console.log(
+      `demo pipeline: ${demoLeads.length} leads, ${demoOpps.length} opportunities`,
+    );
+  } else {
+    console.log(`demo pipeline: skipped (${lc} leads exist)`);
   }
 
   console.log("✓ seed complete");

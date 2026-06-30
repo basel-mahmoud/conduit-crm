@@ -63,3 +63,27 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/accounts` DB-backed, 200).
 - **Next:** M4 — Leads & opportunities (pipeline + kanban).
+
+---
+
+## M4 — Leads & Opportunities
+
+- **Date:** 2026-06-30
+- **Scope:** Lead capture + qualification, opportunity pipeline with kanban,
+  lead→opportunity conversion.
+- **Schema changes:** migration `0002` — `leads` (source/status/project-type,
+  est. value, follow-up, consultant/contractor links) + `opportunities` (9-stage,
+  probability, approvals, competitor, expected close).
+- **Logic:** org-scoped RBAC + audit CRUD for both; atomic `LEAD-####` / `OPP-####`
+  numbering; `updateStage` (kanban + Won/Lost) with stage-default probability and
+  closed_at; conversion copies account/value and links both records.
+- **UI:** leads list/detail/create/edit (+ convert), opportunities kanban board
+  (native DnD, optimistic + server-persisted), opp detail/create/edit, Won/Lost.
+- **Data:** demo seed — 4 leads + 6 opportunities across stages.
+- **Security/testing:** 28 Vitest tests; stage-change verified against Neon
+  (Won → won/100%/closed_at + `opportunity.stage` audit entry).
+- **Known limitations:** drag-and-drop is HTML5-native (no touch DnD yet); meeting
+  records folded into the activity timeline.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M5 — Quotation engine (BOQ, cost build-up, margin, approvals, PDF).

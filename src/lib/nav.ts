@@ -34,8 +34,8 @@ export const navGroups: NavGroup[] = [
   {
     label: "Sales",
     items: [
-      { label: "Leads", href: "/leads", icon: Sparkles, soon: true },
-      { label: "Opportunities", href: "/opportunities", icon: Target, soon: true },
+      { label: "Leads", href: "/leads", icon: Sparkles },
+      { label: "Opportunities", href: "/opportunities", icon: Target },
       { label: "Quotations", href: "/quotations", icon: FileText, soon: true },
       { label: "Accounts", href: "/accounts", icon: Users },
     ],

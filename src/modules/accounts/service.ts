@@ -187,6 +187,17 @@ export async function softDeleteAccount(ctx: AuthContext, id: string) {
   });
 }
 
+/** Lightweight account picker options (id/name/type) for forms. */
+export async function listAccountOptions(ctx: AuthContext) {
+  requirePermission(ctx, "account.read");
+  return db
+    .select({ id: accounts.id, name: accounts.name, type: accounts.type })
+    .from(accounts)
+    .where(and(eq(accounts.orgId, ctx.orgId), isNull(accounts.deletedAt)))
+    .orderBy(accounts.name)
+    .limit(500);
+}
+
 export async function addContact(
   ctx: AuthContext,
   accountId: string,

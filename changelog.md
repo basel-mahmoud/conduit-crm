@@ -2,6 +2,25 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.4.0] — M4 Leads & Opportunities — 2026-06-30
+
+### Added
+- Leads module (migration `0002`): capture (source, consultant/contractor,
+  project type, est. value, follow-up), org-scoped RBAC + audit CRUD, server
+  actions, list (search + status filter) / detail / create / edit, and an atomic,
+  audited lead → opportunity conversion.
+- Opportunities module: 9-stage pipeline, probability, value, expected close,
+  consultant/contractor approvals, competitor; RBAC + audit CRUD; Won/Lost actions.
+- Kanban pipeline board — native drag-and-drop, optimistic UI + server-persisted
+  via `moveStageAction`, per-stage totals and weighted forecast.
+- Atomic ref-number allocation for leads (`LEAD-####`) and opportunities (`OPP-####`).
+- Demo seed: 4 leads + 6 opportunities across stages.
+- 8 Vitest tests (lead/opp validation, stage metadata) — 28 total.
+
+### Verified
+- Against Neon: stage change (Won) → `stage=won`, `probability=100`, `closed_at`
+  set, `opportunity.stage` audit entry written. Pipeline renders live data.
+
 ## [0.3.0] — M3 Customer Database — 2026-06-30
 
 ### Added
