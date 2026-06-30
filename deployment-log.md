@@ -40,5 +40,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Known limitations:** Clerk live login pending key provisioning (dev-auth fallback
   resolves the seeded admin); team-scope filtering refined with the data layer (M3+).
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/admin` DB-backed, 200).
 - **Next:** M3 — Accounts & contacts (8 account types).
