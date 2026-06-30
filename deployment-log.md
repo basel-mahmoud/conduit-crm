@@ -19,6 +19,6 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
   (`.env.example` committed); audit-log hash-chain columns in place for M2.
 - **Known limitations:** no auth yet (routes open until M2); dashboard data is
   illustrative; mobile off-canvas nav pending.
-- **GitHub:** _pending first push._
-- **Vercel:** _pending first deploy._
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm (private).
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · 200).
 - **Next:** M2 — Clerk auth, organizations, RBAC matrix + guard, audit writes.

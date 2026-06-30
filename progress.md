@@ -23,7 +23,8 @@ Living status tracker. Updated every milestone.
 ## Built so far (M0–M1)
 
 - **Infra**: Neon project `conduit-crm` (`flat-lab-71747634`), pooled + direct
-  connection wired. Vercel CLI authed. GitHub remote pending first push.
+  connection wired. GitHub `basel-mahmoud/conduit-crm` (private). Vercel live:
+  https://conduit-crm-eta.vercel.app (env vars set).
 - **DB**: 9 platform tables live in Neon — `organizations`, `users`, `roles`,
   `permissions`, `role_permissions`, `user_roles`, `audit_log` (hash-chain
   ready), `activity_events`, `number_sequences`. Drizzle schema + migration 0000.
