@@ -7,7 +7,13 @@ import { cn } from "@/lib/utils";
 import { navGroups } from "@/lib/nav";
 import { ConduitMark } from "./logo";
 
-export function Sidebar() {
+interface SidebarUser {
+  name: string;
+  roleName: string;
+  initials: string;
+}
+
+export function Sidebar({ user }: { user?: SidebarUser | null }) {
   const pathname = usePathname();
 
   return (
@@ -70,12 +76,14 @@ export function Sidebar() {
       <div className="border-t border-sidebar-border p-3">
         <div className="flex items-center gap-2.5 rounded-md px-2 py-1.5">
           <div className="grid size-7 place-items-center rounded-full bg-sidebar-accent font-mono text-[11px] text-white">
-            BM
+            {user?.initials ?? "—"}
           </div>
           <div className="min-w-0">
-            <div className="truncate text-[12px] text-white">Basel Mahmoud</div>
+            <div className="truncate text-[12px] text-white">
+              {user?.name ?? "Not signed in"}
+            </div>
             <div className="truncate font-mono text-[10px] text-sidebar-muted">
-              Administrator
+              {user?.roleName ?? ""}
             </div>
           </div>
         </div>

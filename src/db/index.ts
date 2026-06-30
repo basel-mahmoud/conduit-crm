@@ -19,4 +19,8 @@ const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 export const db = drizzle(pool, { schema, casing: "snake_case" });
 export type DB = typeof db;
+
+/** Drizzle transaction handle (same query surface as `db`). */
+export type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
+
 export { schema };

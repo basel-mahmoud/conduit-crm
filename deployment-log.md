@@ -22,3 +22,23 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm (private).
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · 200).
 - **Next:** M2 — Clerk auth, organizations, RBAC matrix + guard, audit writes.
+
+---
+
+## M2 — Auth & RBAC
+
+- **Date:** 2026-06-30
+- **Scope:** Authorization engine, audit, seed, admin surface, tests, CI.
+- **Schema changes:** none (uses the M1 platform tables).
+- **Logic:** RBAC guard (`requirePermission`/`can`), 48-permission catalog, 11 roles
+  + 178 grants, audit hash-chain writer (+ verify), atomic number allocator, and the
+  auth-context resolver (Clerk-ready + dev fallback).
+- **UI:** Admin → Users & Roles (real data, permission-gated); shell shows real user.
+- **Data:** idempotent seed applied to Neon (org, roles, grants, owner, sequences).
+- **Security/testing:** 15 Vitest unit tests (RBAC + audit chain); GitHub Actions CI
+  (lint, typecheck, test, build); per-org advisory-locked audit; `FOR UPDATE` sequences.
+- **Known limitations:** Clerk live login pending key provisioning (dev-auth fallback
+  resolves the seeded admin); team-scope filtering refined with the data layer (M3+).
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M3 — Accounts & contacts (8 account types).

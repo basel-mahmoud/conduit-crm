@@ -2,6 +2,27 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.2.0] — M2 Auth & RBAC — 2026-06-30
+
+### Added
+- RBAC engine: 48-permission catalog, 11 system roles with per-permission record
+  scopes (own/team/branch/org), `resolveGrants` matrix merge, and a centralized
+  server-side `requirePermission`/`can` guard incl. field-level cost/margin gate.
+- Tamper-evident audit writer (`writeAudit`) — sha256 hash chain, per-org advisory
+  lock, in-transaction; `verifyAuditChain`. Pure hash module unit-tested.
+- Atomic document-number allocator (`allocateNumber`, `SELECT … FOR UPDATE`).
+- Auth-context resolver: Clerk session when configured, seeded-admin dev fallback
+  otherwise; `getCurrentUserDisplay` powers the shell's real user.
+- Idempotent seed: Conduit org, permission catalog, 11 roles + 178 grants, owner
+  admin, 7 document-number sequences (applied to Neon).
+- Admin → Users & Roles page (real data, permission-gated); shell shows real user.
+- Vitest + 15 unit tests (RBAC matrix, scope enforcement, cost-visibility, audit
+  chain); GitHub Actions CI (lint, typecheck, test, build).
+
+### Notes
+- Clerk live login activates when keys are provisioned; until then the app runs in
+  dev-auth mode (resolves the seeded owner/admin). The Clerk path is wired & gated.
+
 ## [0.1.0] — M1 Foundation — 2026-06-30
 
 ### Added

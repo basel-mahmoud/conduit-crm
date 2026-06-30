@@ -6,6 +6,7 @@ import {
   FileBox,
   FileText,
   FolderKanban,
+  KeyRound,
   LayoutDashboard,
   Settings,
   ShieldCheck,
@@ -61,6 +62,9 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Admin",
-    items: [{ label: "Settings", href: "/settings", icon: Settings, soon: true }],
+    items: [
+      { label: "Users & Roles", href: "/admin", icon: KeyRound },
+      { label: "Settings", href: "/settings", icon: Settings, soon: true },
+    ],
   },
 ];
