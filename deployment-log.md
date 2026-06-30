@@ -134,5 +134,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Known limitations:** document attachments deferred to the Document Center;
   multi-assignee teams folded into PM + site-engineer for now.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/projects` control room verified, 200).
 - **Next:** M7 — AMC/PPM & service operations.
