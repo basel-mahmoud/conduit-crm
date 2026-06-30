@@ -111,5 +111,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Known limitations:** email send is a follow-up (PDF download in place); line
   drag-reorder not yet (section + order fields exist).
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/quotations` + PDF route verified, 200).
 - **Next:** M6 — Project execution (register won quote → project, milestones, snags).
