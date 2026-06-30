@@ -85,5 +85,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Known limitations:** drag-and-drop is HTML5-native (no touch DnD yet); meeting
   records folded into the activity timeline.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/opportunities` + `/leads` DB-backed, 200).
 - **Next:** M5 — Quotation engine (BOQ, cost build-up, margin, approvals, PDF).
