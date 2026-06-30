@@ -12,8 +12,8 @@ Living status tracker. Updated every milestone.
 | M3 | Accounts & contacts (8 account types) | ✅ Done |
 | M4 | Leads & opportunities (+ kanban) | ✅ Done |
 | M5 | Quotation engine + approvals + PDF | ✅ Done |
-| M6 | Project execution | ⏭ Next |
-| M7 | AMC / PPM / service | ◻ Planned |
+| M6 | Project execution | ✅ Done |
+| M7 | AMC / PPM / service | ⏭ Next |
 | M8 | Inventory & equipment | ◻ Planned |
 | M9 | Reports & dashboards (real data) | ◻ Planned |
 | M10 | AI features | ◻ Planned |

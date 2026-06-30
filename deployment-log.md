@@ -113,3 +113,26 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/quotations` + PDF route verified, 200).
 - **Next:** M6 — Project execution (register won quote → project, milestones, snags).
+
+---
+
+## M6 — Project Execution
+
+- **Date:** 2026-06-30
+- **Scope:** Turn won quotations into delivery — the project control room.
+- **Schema changes:** migration `0004` — `projects`, `project_phases` (5 standard),
+  `project_milestones`, `snags`.
+- **Logic:** register-from-quotation (auto `PRJ-####`, contract value from the
+  quote's current revision, marks quote won, seeds the 5 phases); standalone
+  create; phase save (status + progress, auto start/complete timestamps);
+  milestone add/toggle; snag add + status; org-scoped RBAC + audit throughout.
+- **UI:** projects list (progress bars); the **Project Control Room** (execution
+  phases editor, milestone tracker, snag list with inline status, activity, stats);
+  "Register project" on the quotation detail.
+- **Data:** demo seed — `PRJ-0001` (5 phases, 3 milestones, 2 snags).
+- **Security/testing:** 34 Vitest tests; control room verified vs Neon.
+- **Known limitations:** document attachments deferred to the Document Center;
+  multi-assignee teams folded into PM + site-engineer for now.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M7 — AMC/PPM & service operations.

@@ -16,11 +16,15 @@ import {
   opportunities,
   organizations,
   permissions,
+  projectMilestones,
+  projectPhases,
+  projects,
   quotationLines,
   quotationRevisions,
   quotations,
   rolePermissions,
   roles,
+  snags,
   userRoles,
   users,
 } from "@/db/schema";
@@ -30,6 +34,11 @@ import { SYSTEM_ROLES } from "@/server/rbac/roles";
 import type { AccountTypeKey, RatingKey } from "@/modules/accounts/labels";
 import { STAGE_META, type OppStageKey } from "@/modules/opportunities/labels";
 import { calcLineTotals, calcQuotation } from "@/modules/quotations/calc";
+import {
+  PHASE_KINDS,
+  type PhaseKindKey,
+  type PhaseStatusKey,
+} from "@/modules/projects/labels";
 
 const ORG = { name: "Conduit", slug: "conduit", currency: "AED" };
 
@@ -383,6 +392,105 @@ async function main() {
     }
   } else {
     console.log(`demo quotation: skipped (${qc} exist)`);
+  }
+
+  // 10. Demo project (registered from QT-2026-0001), only when none exist yet
+  const [{ pc }] = await db
+    .select({ pc: count() })
+    .from(projects)
+    .where(eq(projects.orgId, org.id));
+  if (Number(pc) === 0) {
+    const [quote] = await db
+      .select({
+        id: quotations.id,
+        title: quotations.title,
+        accountId: quotations.accountId,
+        projectType: quotations.projectType,
+        currentRevisionId: quotations.currentRevisionId,
+        opportunityId: quotations.opportunityId,
+      })
+      .from(quotations)
+      .where(
+        and(eq(quotations.orgId, org.id), eq(quotations.number, "QT-2026-0001")),
+      )
+      .limit(1);
+
+    if (quote) {
+      let contractValue: string | null = null;
+      if (quote.currentRevisionId) {
+        const [rev] = await db
+          .select({ g: quotationRevisions.grandTotal })
+          .from(quotationRevisions)
+          .where(eq(quotationRevisions.id, quote.currentRevisionId))
+          .limit(1);
+        contractValue = rev?.g ?? null;
+      }
+
+      const [proj] = await db
+        .insert(projects)
+        .values({
+          orgId: org.id,
+          code: "PRJ-0001",
+          name: quote.title,
+          quotationId: quote.id,
+          opportunityId: quote.opportunityId,
+          accountId: quote.accountId,
+          projectType: quote.projectType,
+          contractValue,
+          status: "in_progress",
+          health: "on_track",
+          pmId: OWNER.id,
+          location: "DIFC, Dubai",
+          ownerId: OWNER.id,
+          createdBy: OWNER.id,
+          updatedBy: OWNER.id,
+        })
+        .returning();
+
+      const prog: Record<PhaseKindKey, [PhaseStatusKey, number]> = {
+        procurement: ["completed", 100],
+        engineering: ["in_progress", 70],
+        installation: ["in_progress", 30],
+        testing_commissioning: ["not_started", 0],
+        handover: ["not_started", 0],
+      };
+      await db.insert(projectPhases).values(
+        PHASE_KINDS.map((kind, i) => {
+          const [st, pr] = prog[kind];
+          return {
+            orgId: org.id,
+            projectId: proj.id,
+            kind,
+            sortOrder: i,
+            status: st,
+            progressPct: pr,
+            startedAt: pr > 0 ? new Date() : null,
+            completedAt: pr === 100 ? new Date() : null,
+          };
+        }),
+      );
+      await db.insert(projectMilestones).values([
+        { orgId: org.id, projectId: proj.id, title: "Material delivery to site", dueDate: "2026-07-20", status: "done", completedAt: new Date(), sortOrder: 0 },
+        { orgId: org.id, projectId: proj.id, title: "Controllers installed & powered", dueDate: "2026-08-15", sortOrder: 1 },
+        { orgId: org.id, projectId: proj.id, title: "System integration complete", dueDate: "2026-09-10", sortOrder: 2 },
+      ]);
+      await db.insert(snags).values([
+        { orgId: org.id, projectId: proj.id, title: "AHU-3 duct sensor reading drift (+2°C)", severity: "medium", status: "open", raisedBy: OWNER.id, createdBy: OWNER.id, updatedBy: OWNER.id },
+        { orgId: org.id, projectId: proj.id, title: "Panel labelling incomplete — Level 4", severity: "low", status: "in_progress", raisedBy: OWNER.id, createdBy: OWNER.id, updatedBy: OWNER.id },
+      ]);
+      await db
+        .update(numberSequences)
+        .set({ nextVal: 2 })
+        .where(
+          and(
+            eq(numberSequences.orgId, org.id),
+            eq(numberSequences.kind, "project"),
+          ),
+        );
+      console.log("demo project: PRJ-0001 (5 phases, 3 milestones, 2 snags)");
+    }
+  } else {
+    console.log(`demo project: skipped (${pc} exist)`);
   }
 
   console.log("✓ seed complete");

@@ -29,6 +29,13 @@
       "when": 1782849988308,
       "tag": "0003_ancient_centennial",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1782851152354,
+      "tag": "0004_soft_beyonder",
+      "breakpoints": true
     }
   ]
 }

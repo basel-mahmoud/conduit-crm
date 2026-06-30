@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   Check,
   FileDown,
+  FolderKanban,
   GitBranch,
   Send,
   Trash2,
@@ -28,6 +29,7 @@ import {
   getQuotationFull,
   quotationActivity,
 } from "@/modules/quotations/service";
+import { createProjectFromQuotationAction } from "@/modules/projects/actions";
 import { can } from "@/server/rbac/guard";
 import { requireAuthContext } from "@/server/auth/context";
 
@@ -60,6 +62,7 @@ export default async function QuotationDetailPage({
   const canSend = can(ctx, "quotation.send");
   const canApproveDiscount = can(ctx, "discount.approve");
   const canDelete = can(ctx, "quotation.delete");
+  const canProject = can(ctx, "project.create");
 
   const editable =
     canViewCost &&
@@ -122,6 +125,14 @@ export default async function QuotationDetailPage({
               <FileDown className="size-3.5" /> PDF
             </a>
           </Button>
+          {canProject && (
+            <form action={createProjectFromQuotationAction}>
+              <input type="hidden" name="quotationId" value={q.id} />
+              <Button type="submit" variant="outline" size="sm">
+                <FolderKanban className="size-3.5" /> Register project
+              </Button>
+            </form>
+          )}
           {canUpdate && (
             <form action={newRevisionAction}>
               <input type="hidden" name="quotationId" value={q.id} />

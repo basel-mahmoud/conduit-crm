@@ -43,7 +43,7 @@ export const navGroups: NavGroup[] = [
   {
     label: "Delivery",
     items: [
-      { label: "Projects", href: "/projects", icon: FolderKanban, soon: true },
+      { label: "Projects", href: "/projects", icon: FolderKanban },
       { label: "AMC & PPM", href: "/contracts", icon: ShieldCheck, soon: true },
       { label: "Service", href: "/service", icon: Wrench, soon: true },
     ],

@@ -2,6 +2,22 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.6.0] — M6 Project Execution — 2026-06-30
+
+### Added
+- Projects module (migration `0004`): projects + 5 execution phases + milestones
+  + snags. **Registered from a won quotation** (auto `PRJ-####`, contract value
+  from the quote, quotation marked won) or created standalone — phases auto-seeded.
+- **Project Control Room**: execution phases with live progress bars + status
+  (procurement → engineering → installation → T&C → handover), milestone tracker
+  (toggle done), snag list (severity + inline status change), activity, stats.
+- RBAC + audit on all writes; org-scoped; overall progress = avg of phase progress.
+- Demo seed: `PRJ-0001` from `QT-2026-0001` (5 phases, 3 milestones, 2 snags).
+
+### Verified
+- Control room renders real data: contract value AED 231,770 carried from the
+  quotation, 40% overall progress, phases/milestones/snags live.
+
 ## [0.5.0] — M5 Quotation Engine — 2026-06-30
 
 ### Added
