@@ -1,7 +1,7 @@
 import { KeyRound, ShieldCheck } from "lucide-react";
 
 import { navGroups } from "@/lib/nav";
-import { TEST_ACCOUNTS, TEST_OTP } from "@/lib/test-accounts";
+import { TEST_ACCOUNTS, TEST_PASSWORD } from "@/lib/test-accounts";
 import {
   getCurrentUserDisplay,
   requireAuthContext,
@@ -145,13 +145,12 @@ export default async function GuidePage() {
           </span>
         </header>
         <div className="px-5 py-3 text-sm text-muted-foreground">
-          Sign out, enter one of these emails on the sign-in screen, choose{" "}
-          <span className="text-foreground">Continue</span>, then use
-          verification code{" "}
+          Sign out, then sign in with one of these emails and the shared demo
+          password{" "}
           <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[12px] text-foreground">
-            {TEST_OTP}
+            {TEST_PASSWORD}
           </span>{" "}
-          — no real email is sent (Clerk development test accounts).
+          — these are Clerk development test accounts; no real mailbox exists.
         </div>
         <div className="overflow-x-auto border-t border-border">
           <table className="w-full text-sm">
@@ -159,7 +158,7 @@ export default async function GuidePage() {
               <tr className="border-b border-border text-left font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
                 <th className="px-5 py-2 font-medium">Access level</th>
                 <th className="px-5 py-2 font-medium">Email</th>
-                <th className="px-5 py-2 font-medium">Code</th>
+                <th className="px-5 py-2 font-medium">Password</th>
               </tr>
             </thead>
             <tbody>
@@ -169,7 +168,7 @@ export default async function GuidePage() {
                   <td className="px-5 py-2.5 font-mono text-[12px] text-muted-foreground">
                     {a.email}
                   </td>
-                  <td className="px-5 py-2.5 font-mono text-[12px]">{TEST_OTP}</td>
+                  <td className="px-5 py-2.5 font-mono text-[12px]">{TEST_PASSWORD}</td>
                 </tr>
               ))}
             </tbody>

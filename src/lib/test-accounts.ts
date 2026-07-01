@@ -2,11 +2,11 @@
  * Ready-made demo accounts — one per access level.
  *
  * These exist only while Conduit runs on the Clerk DEVELOPMENT instance.
- * They use Clerk's test-email convention (`…+clerk_test@example.com`):
- * no real email is sent, and the sign-in verification code is always 424242.
+ * They use Clerk's test-email convention (`…+clerk_test@example.com`) — no
+ * real mailbox exists and all of them share one demo password.
  * Remove them (and this file) before a real production launch.
  */
-export const TEST_OTP = "424242";
+export const TEST_PASSWORD = "Conduit-Demo-2026";
 
 export interface TestAccount {
   email: string;
