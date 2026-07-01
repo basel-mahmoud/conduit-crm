@@ -6,6 +6,7 @@ import {
   Circle,
   FileText,
   Pencil,
+  ShieldCheck,
   Trash2,
 } from "lucide-react";
 
@@ -32,6 +33,7 @@ import {
   getProjectFull,
   projectActivity,
 } from "@/modules/projects/service";
+import { createContractFromProjectAction } from "@/modules/contracts/actions";
 import { can } from "@/server/rbac/guard";
 import { requireAuthContext } from "@/server/auth/context";
 
@@ -56,6 +58,7 @@ export default async function ProjectControlRoom({
   const activity = await projectActivity(ctx, id);
   const canUpdate = can(ctx, "project.update");
   const canDelete = can(ctx, "project.delete");
+  const canContract = can(ctx, "contract.create");
   const openSnags = snags.filter(
     (s) => s.status !== "resolved" && s.status !== "closed",
   ).length;
@@ -96,6 +99,14 @@ export default async function ProjectControlRoom({
                 <FileText className="size-3.5" /> Quotation
               </Link>
             </Button>
+          )}
+          {canContract && (
+            <form action={createContractFromProjectAction}>
+              <input type="hidden" name="projectId" value={p.id} />
+              <Button type="submit" variant="outline" size="sm">
+                <ShieldCheck className="size-3.5" /> Register AMC
+              </Button>
+            </form>
           )}
           {canUpdate && (
             <Button asChild variant="outline" size="sm">

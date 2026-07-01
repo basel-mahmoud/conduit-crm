@@ -136,3 +136,29 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/projects` control room verified, 200).
 - **Next:** M7 — AMC/PPM & service operations.
+
+---
+
+## M7 — AMC/PPM & Service
+
+- **Date:** 2026-06-30
+- **Scope:** After-sales & recurring revenue — maintenance contracts and the
+  service desk.
+- **Schema changes:** migration `0005` — `contracts`, `assets`, `ppm_visits`,
+  `service_tickets`.
+- **Logic:** contracts (register-from-project auto `AMC-####`, profitability),
+  asset registry, PPM visit scheduling/completion; service tickets with
+  priority-driven SLA (P1–P4) due dates, self-dispatch, status workflow, resolve
+  + CSAT; org-scoped RBAC + audit; atomic `AMC-####` / `TKT-####`.
+- **UI:** contracts list + detail (assets + PPM visits + profitability); service
+  desk (SLA badges + past-SLA banner) + ticket detail (assign/resolve/CSAT);
+  "Register AMC" on the project control room.
+- **Data:** demo seed — `AMC-0001` (3 assets, 3 visits) + 3 tickets (incl. a
+  breached P1).
+- **Security/testing:** 34 Vitest tests; SLA monitoring + contract profitability
+  verified vs Neon.
+- **Known limitations:** signed service reports & spare-parts deduction deferred
+  (spare parts tie into M8 inventory).
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M8 — Inventory & equipment database.

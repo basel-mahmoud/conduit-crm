@@ -2,6 +2,24 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.7.0] — M7 AMC/PPM & Service — 2026-06-30
+
+### Added
+- Contracts module (migration `0005`): AMC/PPM contracts, asset registry, PPM visit
+  scheduling. **Register an AMC from a delivered project** (auto `AMC-####`) or
+  create directly; contract profitability (value − annual cost).
+- Service module: breakdown / request / PPM tickets with priority-driven SLA
+  targets (P1–P4), auto SLA due date, self-dispatch, status workflow, resolution
+  + CSAT.
+- **SLA monitoring** — per-ticket state (on-track / due-soon / breached / met) and
+  a "past SLA" banner on the service desk.
+- RBAC + audit throughout; atomic `AMC-####` / `TKT-####` numbering.
+- Demo seed: `AMC-0001` (3 assets, 3 PPM visits) + 3 service tickets.
+
+### Verified
+- Service desk renders SLA states incl. a breached P1; contract shows
+  profitability AED 48,000, the asset registry and PPM visits.
+
 ## [0.6.0] — M6 Project Execution — 2026-06-30
 
 ### Added

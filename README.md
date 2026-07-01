@@ -5,7 +5,7 @@ for a systems-integration & trading/contracting business operating across BMS,
 LCS, Home Automation, EMS, BTU metering, HVAC controls, ELV, trading, project
 contracting, AMC and PPM.
 
-**Live:** https://conduit-crm-eta.vercel.app · **Status:** 6 of 12 milestones on
+**Live:** https://conduit-crm-eta.vercel.app · **Status:** 7 of 12 milestones on
 production.
 
 Conduit covers the full lifecycle — lead → opportunity → technical quotation →
@@ -16,7 +16,7 @@ permissions and numbers each stage actually demands.
 
 The complete core revenue chain is live and functional:
 
-**lead → opportunity → quotation (+ PDF) → won → project delivery**
+**lead → opportunity → quotation (+ PDF) → won → project delivery → AMC/PPM & service**
 
 - **Auth & RBAC** — 48-permission catalog, 11 system roles with record scopes,
   field-level cost/margin gating, tamper-evident hash-chained audit log.
@@ -29,6 +29,9 @@ The complete core revenue chain is live and functional:
 - **Project execution** — register a won quote as a project, a **control room**
   with the 5 execution phases (procurement → engineering → installation → T&C →
   handover), milestone tracker and snag list.
+- **AMC/PPM & service** — maintenance contracts with profitability, an asset
+  registry, PPM visit scheduling, and service tickets with **priority-driven SLA
+  monitoring** (P1–P4), dispatch, resolution and CSAT.
 
 ## Stack
 
@@ -92,7 +95,7 @@ tests/                 # vitest suites
 - [x] **M4** — Leads & opportunities (kanban pipeline)
 - [x] **M5** — Quotation engine (BOQ, cost build-up, margin, approvals, PDF)
 - [x] **M6** — Project execution (control room, phases, milestones, snags)
-- [ ] **M7** — AMC/PPM & service operations
+- [x] **M7** — AMC/PPM & service operations (contracts, assets, SLA tickets)
 - [ ] **M8** — Inventory & equipment database
 - [ ] **M9** — Reports & dashboards
 - [ ] **M10** — AI assistance features
@@ -105,4 +108,4 @@ See [progress.md](progress.md), [roadmap.md](roadmap.md),
 [changelog.md](changelog.md), [deployment-log.md](deployment-log.md) and
 [PRODUCTION-HARDENING.md](PRODUCTION-HARDENING.md).
 
-Current: **M6 — Project Execution** ✅ · Next: **M7 — AMC/PPM & service**.
+Current: **M7 — AMC/PPM & Service** ✅ · Next: **M8 — Inventory & equipment**.

@@ -13,8 +13,8 @@ Living status tracker. Updated every milestone.
 | M4 | Leads & opportunities (+ kanban) | ✅ Done |
 | M5 | Quotation engine + approvals + PDF | ✅ Done |
 | M6 | Project execution | ✅ Done |
-| M7 | AMC / PPM / service | ⏭ Next |
-| M8 | Inventory & equipment | ◻ Planned |
+| M7 | AMC / PPM / service | ✅ Done |
+| M8 | Inventory & equipment | ⏭ Next |
 | M9 | Reports & dashboards (real data) | ◻ Planned |
 | M10 | AI features | ◻ Planned |
 | M11 | Hardening, testing, security, perf | ◻ Planned |

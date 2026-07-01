@@ -10,12 +10,15 @@ import { and, count, eq } from "drizzle-orm";
 import { db } from "@/db";
 import {
   accounts,
+  assets,
   contacts,
+  contracts,
   leads,
   numberSequences,
   opportunities,
   organizations,
   permissions,
+  ppmVisits,
   projectMilestones,
   projectPhases,
   projects,
@@ -24,6 +27,7 @@ import {
   quotations,
   rolePermissions,
   roles,
+  serviceTickets,
   snags,
   userRoles,
   users,
@@ -39,6 +43,7 @@ import {
   type PhaseKindKey,
   type PhaseStatusKey,
 } from "@/modules/projects/labels";
+import { SLA_TARGETS } from "@/modules/service/labels";
 
 const ORG = { name: "Conduit", slug: "conduit", currency: "AED" };
 
@@ -491,6 +496,90 @@ async function main() {
     }
   } else {
     console.log(`demo project: skipped (${pc} exist)`);
+  }
+
+  // 11. Demo AMC contract + assets + PPM visits + service tickets
+  const [{ cc }] = await db
+    .select({ cc: count() })
+    .from(contracts)
+    .where(eq(contracts.orgId, org.id));
+  if (Number(cc) === 0) {
+    const [proj] = await db
+      .select({
+        id: projects.id,
+        accountId: projects.accountId,
+      })
+      .from(projects)
+      .where(and(eq(projects.orgId, org.id), eq(projects.code, "PRJ-0001")))
+      .limit(1);
+
+    const iso = (d: Date) => d.toISOString().slice(0, 10);
+    const start = new Date();
+    const end = new Date();
+    end.setFullYear(end.getFullYear() + 1);
+    const rem = new Date(end);
+    rem.setDate(rem.getDate() - 30);
+
+    const [contract] = await db
+      .insert(contracts)
+      .values({
+        orgId: org.id,
+        number: "AMC-0001",
+        type: "amc",
+        title: "AMC — DIFC Tower 2 BMS",
+        accountId: proj?.accountId ?? null,
+        projectId: proj?.id ?? null,
+        value: "120000",
+        annualCost: "72000",
+        status: "active",
+        ppmFrequency: "quarterly",
+        startDate: iso(start),
+        endDate: iso(end),
+        renewalReminderAt: iso(rem),
+        ownerId: OWNER.id,
+        createdBy: OWNER.id,
+        updatedBy: OWNER.id,
+      })
+      .returning();
+
+    await db.insert(assets).values([
+      { orgId: org.id, contractId: contract.id, accountId: contract.accountId, name: "AHU-01 DDC controller", category: "ddc", manufacturer: "Schneider", model: "MPM-UN", serialNo: "SE-AHU01-2291", location: "Level 3 plant room", status: "active", createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, contractId: contract.id, accountId: contract.accountId, name: "Chiller plant BTU meter", category: "btu_meter", manufacturer: "Honeywell", model: "EW500", serialNo: "HW-BTU-4410", location: "Basement", status: "active", createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, contractId: contract.id, accountId: contract.accountId, name: "Level 4 lighting controller", category: "lighting_ctrl", manufacturer: "Schneider", model: "C-Bus", location: "Level 4", status: "faulty", createdBy: OWNER.id, updatedBy: OWNER.id },
+    ]);
+
+    const v1 = new Date(); v1.setMonth(v1.getMonth() - 1);
+    const v2 = new Date(); v2.setMonth(v2.getMonth() + 2);
+    const v3 = new Date(); v3.setMonth(v3.getMonth() + 5);
+    await db.insert(ppmVisits).values([
+      { orgId: org.id, contractId: contract.id, scheduledDate: iso(v1), status: "completed", completedAt: v1, technicianId: OWNER.id, sortOrder: 0 },
+      { orgId: org.id, contractId: contract.id, scheduledDate: iso(v2), status: "planned", sortOrder: 1 },
+      { orgId: org.id, contractId: contract.id, scheduledDate: iso(v3), status: "planned", sortOrder: 2 },
+    ]);
+    await db
+      .update(numberSequences)
+      .set({ nextVal: 2 })
+      .where(
+        and(eq(numberSequences.orgId, org.id), eq(numberSequences.kind, "contract")),
+      );
+
+    const now = Date.now();
+    const due = (p: "p1" | "p2" | "p3" | "p4") =>
+      new Date(now + SLA_TARGETS[p].resolveMins * 60_000);
+    await db.insert(serviceTickets).values([
+      { orgId: org.id, number: "TKT-2026-0001", title: "Chiller plant BMS communication offline", description: "No comms from chiller DDC since 06:00.", type: "breakdown", priority: "p1", status: "in_progress", accountId: contract.accountId, contractId: contract.id, slaResponseMins: SLA_TARGETS.p1.responseMins, slaResolveMins: SLA_TARGETS.p1.resolveMins, slaDueAt: new Date(now - 2 * 60 * 60 * 1000), assignedTo: OWNER.id, openedAt: new Date(now - 3 * 60 * 60 * 1000), ownerId: OWNER.id, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, number: "TKT-2026-0002", title: "AHU-3 duct sensor calibration request", type: "request", priority: "p3", status: "open", accountId: contract.accountId, contractId: contract.id, slaResponseMins: SLA_TARGETS.p3.responseMins, slaResolveMins: SLA_TARGETS.p3.resolveMins, slaDueAt: due("p3"), openedAt: new Date(now - 60 * 60 * 1000), ownerId: OWNER.id, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, number: "TKT-2026-0003", title: "Quarterly PPM — Level 4 lighting", type: "ppm", priority: "p4", status: "resolved", accountId: contract.accountId, contractId: contract.id, slaResponseMins: SLA_TARGETS.p4.responseMins, slaResolveMins: SLA_TARGETS.p4.resolveMins, slaDueAt: due("p4"), assignedTo: OWNER.id, openedAt: new Date(now - 48 * 60 * 60 * 1000), resolvedAt: new Date(now - 24 * 60 * 60 * 1000), resolution: "Replaced faulty relay, recommissioned scene controller.", csat: 5, ownerId: OWNER.id, createdBy: OWNER.id, updatedBy: OWNER.id },
+    ]);
+    await db
+      .update(numberSequences)
+      .set({ nextVal: 4 })
+      .where(
+        and(eq(numberSequences.orgId, org.id), eq(numberSequences.kind, "ticket")),
+      );
+    console.log("demo service: AMC-0001 (3 assets, 3 visits) + 3 tickets");
+  } else {
+    console.log(`demo service: skipped (${cc} contracts exist)`);
   }
 
   console.log("✓ seed complete");
