@@ -2,6 +2,25 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.11.0] — M11 Hardening & Security — 2026-07-01
+
+### Added
+- **Security headers** (`next.config`): HSTS (preload), CSP, X-Frame-Options DENY,
+  X-Content-Type-Options nosniff, Referrer-Policy, Permissions-Policy.
+- **Rate limiting** (`src/server/rate-limit.ts`) — fixed-window limiter applied to
+  the AI endpoints.
+- **Error handling** — app + global error boundaries, `not-found`, and a
+  `/api/health` check (DB ping → 200/503).
+- **Dependabot** (weekly npm + actions) and a **DR runbook** (`docs/runbooks/dr.md`,
+  RPO ≤5m / RTO ≤30m).
+- +5 tests (rate-limit, SLA state, multi-entry audit-chain tamper detection) — 39
+  total.
+- `PRODUCTION-HARDENING.md` refreshed to reflect the shipped state.
+
+### Verified
+- `/api/health` returns `{status:"ok",db:true}`; 39 tests + typecheck + lint +
+  build green.
+
 ## [0.10.0] — M10 AI Assistance — 2026-07-01
 
 ### Added

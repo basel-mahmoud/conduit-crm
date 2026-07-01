@@ -15,30 +15,30 @@ Standing production-readiness standard, tracked per item. Legend:
 | Secrets management | ✅ | `.env*` gitignored; `.env.example` template only; Vercel env at deploy. |
 | HTTPS / TLS / encryption in transit | 🏗 | Vercel TLS; Neon `sslmode=require`. |
 | Encryption at rest | 🏗 | Neon-managed. |
-| Rate limiting & abuse prevention | ⏳ M2/M11 | Upstash on auth/AI/export/upload. |
-| Dependency scanning & patching | 🟡 | `npm audit` reviewed; CI gate + Dependabot in M11. |
-| Multi-tenancy & data isolation | 🟡 | `org_id` on every table; service queries enforce org scope (verified); Postgres RLS deferred to M11. |
+| Rate limiting & abuse prevention | 🟡 | Fixed-window limiter on AI endpoints (`src/server/rate-limit.ts`); Upstash for distributed/all-mutations. |
+| Dependency scanning & patching | ✅ | Dependabot weekly (`.github/dependabot.yml`); `npm audit` reviewed. |
+| Multi-tenancy & data isolation | 🟡 | `org_id` on every table; every service query enforces org scope (unit-tested). RLS `FORCE` deferred — needs per-request `SET app.org_id` wiring; app-level scoping is the primary, verified control. |
 | PII handling · retention · deletion | ⏳ M11 | Policy + erasure workflow. |
 | Audit trails & tamper-evident logging | ✅ | sha256 hash chain, per-org advisory lock, in-transaction writer + verifier; unit-tested. |
-| Security headers (CSP/HSTS/X-Frame-Options) | ⏳ M2 | Set in `next.config` / proxy. |
+| Security headers (CSP/HSTS/X-Frame-Options) | ✅ | `next.config` headers: HSTS (preload), CSP, X-Frame-Options DENY, nosniff, Referrer-Policy, Permissions-Policy. |
 
 ## Testing & CI
 | Item | Status | Notes |
 |---|---|---|
-| Unit / integration / e2e / regression | 🟡 | 15 Vitest unit tests (RBAC + audit); integration/e2e with the data layer (M3+). |
-| Load & stress · chaos/resilience | ⏳ M11 | k6 + failure-mode tests. |
+| Unit / integration / e2e / regression | 🟡 | 39 Vitest tests (RBAC, audit chain, quote math, pipeline, SLA, rate-limit); Playwright e2e is future. |
+| Load & stress · chaos/resilience | ⏳ | k6 load + failure-mode tests (future); graceful degradation in place. |
 | CI enforcement (block merge on fail) | ✅ | GitHub Actions: lint, typecheck, test, build on push/PR. |
 | Code review standards (lint/typecheck/conventions) | ✅ | ESLint flat + strict TS; green. |
 
 ## Reliability & resilience
 | Item | Status | Notes |
 |---|---|---|
-| Error handling & graceful degradation | 🟡 | Env fails fast; error boundaries per route in M2+. |
-| Retry + backoff **and** idempotency | ⏳ M2 | Idempotency keys on mutating endpoints; atomic `number_sequences`. |
-| Circuit breakers & fallback | ⏳ M10/M11 | Around AI/email/external. |
+| Error handling & graceful degradation | ✅ | App + global error boundaries, `not-found`, `/api/health`; env fails fast; server actions return typed errors. |
+| Retry + backoff **and** idempotency | 🟡 | Atomic `number_sequences` (no dup docs); idempotency keys on all mutations is future. |
+| Circuit breakers & fallback | 🟡 | AI: try/catch + deterministic heuristic fallback; broader breakers for email/external later. |
 | Concurrency & race-condition prevention | ✅ | `SELECT … FOR UPDATE` number allocation + per-org advisory-locked audit; optimistic concurrency on quotes (M5). |
-| Caching strategy & invalidation | ⏳ M9 | TanStack Query + tag-based revalidation. |
-| RTO/RPO · DR · backups | 🏗/⏳ M11 | Neon PITR; documented DR runbook in M11. |
+| Caching strategy & invalidation | 🟡 | `revalidatePath` on every mutation; authed pages are dynamic; read-cache/CDN later. |
+| RTO/RPO · DR · backups | 🟡 | Neon PITR; Vercel instant rollback; DR runbook `docs/runbooks/dr.md` (RPO ≤5m, RTO ≤30m). |
 
 ## Architecture & docs
 | Item | Status | Notes |

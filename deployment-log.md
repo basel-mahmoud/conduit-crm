@@ -226,3 +226,22 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · 200).
 - **Next:** M11 — Hardening, testing, security, performance.
+
+---
+
+## M11 — Hardening & Security
+
+- **Date:** 2026-07-01
+- **Scope:** Production-hardening pass — security, resilience, observability.
+- **Added:** security headers (HSTS/CSP/X-Frame-Options/nosniff/Referrer-Policy/
+  Permissions-Policy) via `next.config`; fixed-window rate limiter on AI endpoints;
+  app + global error boundaries, `not-found`, `/api/health` (DB ping);
+  `.github/dependabot.yml`; `docs/runbooks/dr.md` (RPO ≤5m / RTO ≤30m); +5 tests
+  (39 total). Refreshed `PRODUCTION-HARDENING.md`.
+- **Notes:** RLS `FORCE` intentionally deferred (needs per-request `SET app.org_id`
+  wiring) — app-level org scoping remains the primary, unit-tested control.
+- **Security/testing:** 39 Vitest tests; typecheck + lint + build green;
+  `/api/health` returns `{status:"ok"}`.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M12 — Production readiness & rollout.

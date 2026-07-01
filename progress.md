@@ -17,8 +17,8 @@ Living status tracker. Updated every milestone.
 | M8 | Inventory & equipment | ✅ Done |
 | M9 | Reports & dashboards (real data) | ✅ Done |
 | M10 | AI features | ✅ Done |
-| M11 | Hardening, testing, security, perf | ⏭ Next |
-| M12 | Production rollout | ◻ Planned |
+| M11 | Hardening, testing, security, perf | ✅ Done |
+| M12 | Production rollout | ⏭ Next |
 
 ## Built so far (M0–M1)
 

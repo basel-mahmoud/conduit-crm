@@ -5,7 +5,7 @@ for a systems-integration & trading/contracting business operating across BMS,
 LCS, Home Automation, EMS, BTU metering, HVAC controls, ELV, trading, project
 contracting, AMC and PPM.
 
-**Live:** https://conduit-crm-eta.vercel.app · **Status:** 10 of 12 milestones on
+**Live:** https://conduit-crm-eta.vercel.app · **Status:** 11 of 12 milestones on
 production.
 
 Conduit covers the full lifecycle — lead → opportunity → technical quotation →
@@ -53,7 +53,8 @@ The complete core revenue chain is live and functional:
 | Auth | Clerk (organizations) — wired & gated; dev-auth fallback until keys are set |
 | Validation | Zod (shared client/server) |
 | PDF | @react-pdf/renderer (server) |
-| Testing | Vitest (34 tests) · GitHub Actions CI (lint · typecheck · test · build) |
+| Testing | Vitest (39 tests) · GitHub Actions CI (lint · typecheck · test · build) |
+| Security | CSP/HSTS headers · RBAC · hash-chained audit · rate limiting · `/api/health` |
 | Deploy | Vercel · GitHub |
 
 ## Getting started
@@ -109,7 +110,7 @@ tests/                 # vitest suites
 - [x] **M8** — Inventory & equipment database (catalog, stock ledger, POs)
 - [x] **M9** — Reports & dashboards (real cross-module data)
 - [x] **M10** — AI assistance (scoring, next-action, email drafting)
-- [ ] **M11** — Hardening, testing, security, performance
+- [x] **M11** — Hardening (security headers, rate limiting, error boundaries, tests)
 - [ ] **M12** — Production readiness & rollout
 
 ## Project state
@@ -118,4 +119,4 @@ See [progress.md](progress.md), [roadmap.md](roadmap.md),
 [changelog.md](changelog.md), [deployment-log.md](deployment-log.md) and
 [PRODUCTION-HARDENING.md](PRODUCTION-HARDENING.md).
 
-Current: **M10 — AI Assistance** ✅ · Next: **M11 — Hardening & security**.
+Current: **M11 — Hardening & Security** ✅ · Next: **M12 — Production rollout**.
