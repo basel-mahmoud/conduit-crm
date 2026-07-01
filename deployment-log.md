@@ -203,5 +203,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Security/testing:** 34 Vitest tests; reports gated on `report.view`; verified
   live vs Neon.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/dashboard` + `/reports` live, 200).
 - **Next:** M10 — AI assistance features.
