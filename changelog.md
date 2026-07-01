@@ -2,6 +2,21 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [1.2.0] — AI on Google Gemini — 2026-07-01
+
+Switched the AI gateway from Anthropic Claude to **Google Gemini** (free tier).
+
+### Changed
+- `src/server/ai/gateway.ts` now calls Gemini `generateContent`
+  (`gemini-2.5-flash`, thinking disabled so the token budget goes to the answer),
+  gated on `GEMINI_API_KEY`; the deterministic heuristic fallback is unchanged.
+- `callClaude` → `callModel`; the assist source badge reads **Gemini**; docs
+  (`ai.md`, ADR-0001, go-live) and `.env.example` updated.
+
+### Verified
+- Live in production: opportunity AI assist returns a real, context-aware score +
+  assessment + next action + draft email, with a **Gemini** source badge.
+
 ## [1.1.0] — Real authentication (Clerk cutover) — 2026-07-01
 
 Switched from dev-auth to **real Clerk authentication**, live in production.

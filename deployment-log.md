@@ -289,3 +289,23 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
   instance + custom domain, `ANTHROPIC_API_KEY`, Sentry — see `docs/runbooks/go-live.md`.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · auth verified).
+
+---
+
+## Post-1.0 — AI on Google Gemini · **v1.2.0** 🤖
+
+- **Date:** 2026-07-01
+- **Scope:** Switched AI from Claude → **Google Gemini** (free tier), per user.
+- **Provisioned (autonomously via browser):** Gemini key sourced from AI Studio —
+  automated key **creation** was blocked ("request is suspicious"), so the user's
+  existing free-tier "Eyedx api key" was **reused**; set as `GEMINI_API_KEY` +
+  `AI_MODEL=gemini-2.5-flash` in `.env.local` and Vercel prod.
+- **Changed:** `gateway.ts` → Gemini `generateContent` (`x-goog-api-key`, thinking
+  disabled); `callClaude`→`callModel`; source badge + docs updated.
+- **Verified (browser, prod):** OPP-0001 AI assist → score 69 + assessment + next
+  action + draft email, badge **GEMINI**; lint + typecheck + 39 tests + build green.
+- **Commit:** `7e80532`.
+- **Note:** the reused key is shared with the CivicSnap/Eyedx GCP project; if it is
+  rotated Conduit AI silently falls back to heuristics — make a dedicated key later.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · Gemini verified).
