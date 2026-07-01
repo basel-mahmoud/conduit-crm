@@ -243,5 +243,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Security/testing:** 39 Vitest tests; typecheck + lint + build green;
   `/api/health` returns `{status:"ok"}`.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · headers + `/api/health` verified).
 - **Next:** M12 — Production readiness & rollout.
