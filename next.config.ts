@@ -1,12 +1,19 @@
 import type { NextConfig } from "next";
 
+// Clerk loads ClerkJS from the instance's Frontend API host and uses Cloudflare
+// Turnstile for bot protection; these hosts must be allow-listed in the CSP.
+const clerk = "https://*.clerk.accounts.dev https://*.clerk.com";
+const turnstile = "https://challenges.cloudflare.com";
+
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${clerk} ${turnstile}`,
+  "worker-src 'self' blob:",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  `connect-src 'self' ${clerk} https://clerk-telemetry.com`,
+  `frame-src 'self' ${clerk} ${turnstile}`,
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "object-src 'none'",
