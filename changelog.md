@@ -2,6 +2,24 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [1.0.0] — M12 Production Rollout — 2026-07-01
+
+**All 12 milestones complete.** Conduit reaches v1.0 — a full systems-integration
+CRM covering leads → opportunities → quotations → projects → AMC/PPM/service →
+inventory, with RBAC, tamper-evident audit, reports, and AI assist.
+
+### Added
+- **Go-live runbook** (`docs/runbooks/go-live.md`) — Clerk cutover, environment,
+  data, domain/TLS, monitoring, backups/DR, and a pre-launch smoke test.
+- **ADR-0002** (provider-agnostic auth + dev-auth fallback) and **ADR-0003**
+  (exact integer-cent money math + hash-chained audit) recording the two
+  foundational decisions.
+
+### Verified (final regression)
+- Lint, typecheck, 39 tests, and production build all green.
+- All 13 production routes return 200; security headers + `/api/health` confirmed
+  live on https://conduit-crm-eta.vercel.app.
+
 ## [0.11.0] — M11 Hardening & Security — 2026-07-01
 
 ### Added

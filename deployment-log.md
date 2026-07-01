@@ -245,3 +245,24 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · headers + `/api/health` verified).
 - **Next:** M12 — Production readiness & rollout.
+
+---
+
+## M12 — Production Rollout · **v1.0.0** 🎉
+
+- **Date:** 2026-07-01
+- **Scope:** Final milestone — production readiness, rollout docs, final regression.
+  **All 12 milestones complete.**
+- **Added:** go-live runbook (`docs/runbooks/go-live.md`) — Clerk cutover, env,
+  data, domain/TLS, monitoring, backups/DR, pre-launch smoke test; **ADR-0002**
+  (provider-agnostic auth + dev-auth fallback) and **ADR-0003** (exact integer-cent
+  money + hash-chained audit); README/changelog/progress marked v1.0.0.
+- **Final regression:** lint + typecheck + 39 tests + production build all green;
+  all 13 production routes return **200**; security headers + `/api/health`
+  re-verified live.
+- **Remaining (user-side go-live):** provision Clerk keys + mount provider/
+  middleware/webhook, set optional `ANTHROPIC_API_KEY`, custom domain, Sentry DSN —
+  all documented in the go-live runbook.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · 12/12 verified).
+- **Next:** — (project complete; go-live cutover is user-side per runbook).

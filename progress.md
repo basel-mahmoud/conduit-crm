@@ -18,7 +18,12 @@ Living status tracker. Updated every milestone.
 | M9 | Reports & dashboards (real data) | ✅ Done |
 | M10 | AI features | ✅ Done |
 | M11 | Hardening, testing, security, perf | ✅ Done |
-| M12 | Production rollout | ⏭ Next |
+| M12 | Production rollout | ✅ Done |
+
+**All 12 milestones complete — v1.0.0 shipped to production.**
+Live: https://conduit-crm-eta.vercel.app · 39 tests green · lint/typecheck/build
+clean · all 13 routes 200 · security headers + `/api/health` verified.
+Go-live cutover steps (Clerk, monitoring, domain) in `docs/runbooks/go-live.md`.
 
 ## Built so far (M0–M1)
 

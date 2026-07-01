@@ -5,8 +5,8 @@ for a systems-integration & trading/contracting business operating across BMS,
 LCS, Home Automation, EMS, BTU metering, HVAC controls, ELV, trading, project
 contracting, AMC and PPM.
 
-**Live:** https://conduit-crm-eta.vercel.app · **Status:** 11 of 12 milestones on
-production.
+**Live:** https://conduit-crm-eta.vercel.app · **Status:** v1.0.0 — all 12
+milestones shipped to production.
 
 Conduit covers the full lifecycle — lead → opportunity → technical quotation →
 project execution → AMC/PPM & service — with the documents, approvals,
@@ -111,7 +111,7 @@ tests/                 # vitest suites
 - [x] **M9** — Reports & dashboards (real cross-module data)
 - [x] **M10** — AI assistance (scoring, next-action, email drafting)
 - [x] **M11** — Hardening (security headers, rate limiting, error boundaries, tests)
-- [ ] **M12** — Production readiness & rollout
+- [x] **M12** — Production readiness & rollout (go-live runbook, ADRs, final regression)
 
 ## Project state
 
@@ -119,4 +119,5 @@ See [progress.md](progress.md), [roadmap.md](roadmap.md),
 [changelog.md](changelog.md), [deployment-log.md](deployment-log.md) and
 [PRODUCTION-HARDENING.md](PRODUCTION-HARDENING.md).
 
-Current: **M11 — Hardening & Security** ✅ · Next: **M12 — Production rollout**.
+**v1.0.0 — all 12 milestones complete and live.** Go-live cutover steps (Clerk,
+monitoring, custom domain, DR) are in [docs/runbooks/go-live.md](docs/runbooks/go-live.md).
