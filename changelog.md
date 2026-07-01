@@ -2,6 +2,23 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.8.0] — M8 Inventory & Equipment — 2026-06-30
+
+### Added
+- Inventory module (migration `0006`): unified products/equipment catalog,
+  manufacturers, an append-only **stock ledger** (cached on-hand), low-stock
+  alerts, and **purchase orders** (lines + receive → stock movement).
+- Products carry SKU, category, manufacturer, model, cost/sell, lead time,
+  reorder level, `specs` (jsonb), datasheet URL.
+- `/equipment` — a searchable **technical equipment library** over the same
+  catalog (controllers, DDCs, sensors, valves, meters…).
+- RBAC + audit throughout; atomic `PO-####`; manufacturer upsert-by-name.
+- Demo seed: 8 products, 3 manufacturers, `PO-2026-0001`.
+
+### Verified
+- Catalog renders with low-stock flagging; product detail shows margin, specs
+  and the stock ledger; PO receive increments stock.
+
 ## [0.7.0] — M7 AMC/PPM & Service — 2026-06-30
 
 ### Added

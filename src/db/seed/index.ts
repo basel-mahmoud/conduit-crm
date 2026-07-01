@@ -14,14 +14,18 @@ import {
   contacts,
   contracts,
   leads,
+  manufacturers,
   numberSequences,
   opportunities,
   organizations,
   permissions,
   ppmVisits,
+  products,
   projectMilestones,
   projectPhases,
   projects,
+  purchaseOrderLines,
+  purchaseOrders,
   quotationLines,
   quotationRevisions,
   quotations,
@@ -580,6 +584,70 @@ async function main() {
     console.log("demo service: AMC-0001 (3 assets, 3 visits) + 3 tickets");
   } else {
     console.log(`demo service: skipped (${cc} contracts exist)`);
+  }
+
+  // 12. Demo inventory — manufacturers, products, a purchase order
+  const [{ prc }] = await db
+    .select({ prc: count() })
+    .from(products)
+    .where(eq(products.orgId, org.id));
+  if (Number(prc) === 0) {
+    await db
+      .insert(manufacturers)
+      .values([
+        { orgId: org.id, name: "Schneider Electric", website: "se.com" },
+        { orgId: org.id, name: "Honeywell", website: "honeywell.com" },
+        { orgId: org.id, name: "ABB", website: "abb.com" },
+      ])
+      .onConflictDoNothing({ target: [manufacturers.orgId, manufacturers.name] });
+    const mfrs = await db
+      .select({ id: manufacturers.id, name: manufacturers.name })
+      .from(manufacturers)
+      .where(eq(manufacturers.orgId, org.id));
+    const mfr = (n: string) => mfrs.find((m) => m.name === n)?.id ?? null;
+
+    await db.insert(products).values([
+      { orgId: org.id, sku: "MPM-UN", name: "DDC controller, 32-point", category: "ddc", manufacturerId: mfr("Schneider Electric"), modelNo: "MPM-UN", cost: "3200", sellPrice: "4425", leadTimeDays: 21, reorderLevel: 5, stockQty: 8, specs: { Protocol: "BACnet/IP", Points: "32", Power: "24VDC" }, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, sku: "IO-16", name: "I/O expansion module, 16-point", category: "ddc", manufacturerId: mfr("Schneider Electric"), modelNo: "IO-16", cost: "850", sellPrice: "1180", leadTimeDays: 14, reorderLevel: 10, stockQty: 30, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, sku: "DTS-01", name: "Duct temperature sensor", category: "sensor", manufacturerId: mfr("Honeywell"), cost: "180", sellPrice: "288", leadTimeDays: 7, reorderLevel: 40, stockQty: 120, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, sku: "MV-DN50", name: "Modulating control valve DN50 + actuator", category: "valve", manufacturerId: mfr("Honeywell"), cost: "1100", sellPrice: "1475", leadTimeDays: 28, reorderLevel: 6, stockQty: 3, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, sku: "VFD-7K5", name: "Variable frequency drive 7.5kW", category: "vfd", manufacturerId: mfr("ABB"), cost: "2600", sellPrice: "3400", leadTimeDays: 35, reorderLevel: 4, stockQty: 4, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, sku: "BTU-EW500", name: "BTU energy meter", category: "btu_meter", manufacturerId: mfr("Honeywell"), modelNo: "EW500", cost: "2200", sellPrice: "2950", leadTimeDays: 21, reorderLevel: 5, stockQty: 12, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, sku: "LC-CBUS", name: "Lighting control unit", category: "lighting_ctrl", manufacturerId: mfr("Schneider Electric"), modelNo: "C-Bus", cost: "1400", sellPrice: "1900", leadTimeDays: 21, reorderLevel: 4, stockQty: 6, createdBy: OWNER.id, updatedBy: OWNER.id },
+      { orgId: org.id, sku: "TH-RT", name: "Room thermostat", category: "thermostat", manufacturerId: mfr("Honeywell"), cost: "220", sellPrice: "340", leadTimeDays: 10, reorderLevel: 20, stockQty: 60, createdBy: OWNER.id, updatedBy: OWNER.id },
+    ]);
+
+    const [schneider] = await db
+      .select({ id: accounts.id })
+      .from(accounts)
+      .where(and(eq(accounts.orgId, org.id), eq(accounts.name, "Schneider Electric")))
+      .limit(1);
+    const [po] = await db
+      .insert(purchaseOrders)
+      .values({
+        orgId: org.id,
+        number: "PO-2026-0001",
+        supplierId: schneider?.id ?? null,
+        status: "ordered",
+        orderDate: new Date().toISOString().slice(0, 10),
+        total: "55120",
+        ownerId: OWNER.id,
+        createdBy: OWNER.id,
+        updatedBy: OWNER.id,
+      })
+      .returning();
+    await db.insert(purchaseOrderLines).values([
+      { orgId: org.id, poId: po.id, description: "DDC controller, 32-point (MPM-UN)", qty: 10, unitCost: "3200", lineTotal: "32000" },
+      { orgId: org.id, poId: po.id, description: "I/O expansion module, 16-point", qty: 20, unitCost: "850", lineTotal: "17000" },
+      { orgId: org.id, poId: po.id, description: "Duct temperature sensor", qty: 34, unitCost: "180", lineTotal: "6120" },
+    ]);
+    await db
+      .update(numberSequences)
+      .set({ nextVal: 2 })
+      .where(and(eq(numberSequences.orgId, org.id), eq(numberSequences.kind, "po")));
+    console.log("demo inventory: 8 products, 3 manufacturers, PO-2026-0001");
+  } else {
+    console.log(`demo inventory: skipped (${prc} products exist)`);
   }
 
   console.log("✓ seed complete");

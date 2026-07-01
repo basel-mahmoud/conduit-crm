@@ -162,3 +162,26 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/contracts` + `/service` verified, 200).
 - **Next:** M8 — Inventory & equipment database.
+
+---
+
+## M8 — Inventory & Equipment
+
+- **Date:** 2026-06-30
+- **Scope:** Product/equipment catalog, stock control, and procurement.
+- **Schema changes:** migration `0006` — `manufacturers`, `products` (unified
+  commercial + technical), `stock_movements` (ledger), `purchase_orders`,
+  `purchase_order_lines`.
+- **Logic:** products CRUD (manufacturer upsert-by-name), stock adjust (ledger +
+  cached on-hand), low-stock query; PO create/add-line/receive (receive posts
+  purchase movements + increments stock); org-scoped RBAC + audit; atomic `PO-####`.
+- **UI:** inventory catalog (search, category + low-stock filters); product detail
+  (margin, specs, stock ledger + adjust); `/equipment` technical library; PO list /
+  detail (receive → stock) / new.
+- **Data:** demo seed — 8 products, 3 manufacturers, `PO-2026-0001`.
+- **Security/testing:** 34 Vitest tests; catalog + low-stock verified vs Neon.
+- **Known limitations:** sales orders & multi-warehouse deferred; datasheet is a
+  URL (file storage lands with the Document Center).
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M9 — Reports & dashboards (real data).

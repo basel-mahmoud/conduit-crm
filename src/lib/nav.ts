@@ -51,8 +51,8 @@ export const navGroups: NavGroup[] = [
   {
     label: "Catalog",
     items: [
-      { label: "Inventory", href: "/inventory", icon: Boxes, soon: true },
-      { label: "Equipment", href: "/equipment", icon: Cpu, soon: true },
+      { label: "Inventory", href: "/inventory", icon: Boxes },
+      { label: "Equipment", href: "/equipment", icon: Cpu },
       { label: "Documents", href: "/documents", icon: FileBox, soon: true },
     ],
   },

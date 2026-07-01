@@ -11,3 +11,4 @@ export * from "./opportunities";
 export * from "./quotations";
 export * from "./projects";
 export * from "./service";
+export * from "./inventory";
