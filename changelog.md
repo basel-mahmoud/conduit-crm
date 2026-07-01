@@ -2,6 +2,26 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [1.3.0] — Documents, Settings & green CI — 2026-07-02
+
+### Added
+- **Documents** (`/documents`) — a document register listing every generated
+  quotation PDF (searchable; number, customer, status, value, date; view +
+  download-PDF actions), RBAC-gated on `quotation.read`.
+- **Settings** (`/settings`) — organization profile (editable name via an
+  RBAC-gated server action; slug/currency/VAT/fiscal/created), a your-account
+  summary, and system status (auth mode, AI provider, tenancy). Both nav items
+  lost their "soon" flag — the app has no placeholder pages left.
+
+### Fixed
+- **CI was failing on every push** at `npm ci`: the committed lockfile (npm 11)
+  was missing `esbuild@0.28.1` platform entries that CI's npm 10 required.
+  Regenerated a complete lockfile and moved CI to node 24 (npm 11) so it matches
+  the generating environment. Vercel (npm install) was never affected.
+- Cleared the Dependabot backlog: merged the checkout + setup-node action bumps,
+  closed the grouped npm bump (it upgraded ESLint past the react-plugin rule API).
+  Main CI is green; no open PRs.
+
 ## [1.2.0] — AI on Google Gemini — 2026-07-01
 
 Switched the AI gateway from Anthropic Claude to **Google Gemini** (free tier).

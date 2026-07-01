@@ -309,3 +309,24 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
   rotated Conduit AI silently falls back to heuristics — make a dedicated key later.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · Gemini verified).
+
+---
+
+## Post-1.0 — Documents, Settings & CI repair · **v1.3.0** 🧹
+
+- **Date:** 2026-07-02
+- **Scope:** Built the last two placeholder pages and fixed all GitHub CI failures.
+- **Added:** `/documents` (quotation-PDF register) and `/settings` (org profile +
+  editable name, account summary, system status); removed the `soon` nav flags.
+- **CI fix:** every push had failed at `npm ci` — committed lockfile (npm 11) was
+  missing `esbuild@0.28.1` platform entries that CI's npm 10 demanded. Regenerated
+  a complete lockfile; moved `setup-node` to node 24 (npm 11) to match. Vercel
+  (`npm install`) was unaffected, which is why deploys kept succeeding.
+- **Dependabot:** merged #1 (checkout→v7) + #2 (setup-node→v6, applied on main to
+  resolve a conflict); closed #4 (grouped npm bump broke ESLint). 0 open PRs.
+- **Verified:** main CI **green** on every recent run; `/settings` save works
+  (org name persisted), `/documents` lists QT-2026-0001 with a working PDF link;
+  `/api/health` ok; lint + typecheck + 39 tests + build green.
+- **Commits:** `1e7bb79` (CI), `33fa8e4` (pages), `e9ef91c`/`9cc8edb` (action bumps).
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY).
