@@ -160,5 +160,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Known limitations:** signed service reports & spare-parts deduction deferred
   (spare parts tie into M8 inventory).
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/contracts` + `/service` verified, 200).
 - **Next:** M8 — Inventory & equipment database.
