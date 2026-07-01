@@ -2,6 +2,30 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [1.4.0] — Access UX, global search & demo accounts — 2026-07-02
+
+### Added
+- **Global search that works** — the topbar search (and ⌘K / Ctrl+K) opens a
+  command palette searching accounts, leads, opportunities, quotations, projects,
+  AMC contracts, service tickets and inventory; org-scoped, permission-filtered,
+  keyboard-navigable, rate-limited (`/api/search`).
+- **Access indicator** — your role shows as a badge in the topbar and in the
+  sidebar footer; both link to the guide.
+- **Access guide** (`/guide`) — your-access summary (which modules your role can
+  open), how roles/scopes/cost-gating work, an 11-role reference, and demo
+  account credentials.
+- **Role management** — Admin → Users & Roles → *Edit access*: assign or remove
+  roles per user (audited; safety rails: can't remove your own admin role or the
+  org's last administrator).
+- **Demo accounts** — one per access level (11 total), Clerk test emails with a
+  shared password, pre-linked to their role.
+
+### Fixed
+- **New sign-ups no longer crash every page.** Accounts with no roles now see a
+  branded "access pending" screen instead of raw permission errors, and the
+  sidebar only shows modules the signed-in role can actually open.
+- The error boundary now points to the access guide when a page fails.
+
 ## [1.3.0] — Documents, Settings & green CI — 2026-07-02
 
 ### Added

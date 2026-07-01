@@ -330,3 +330,28 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Commits:** `1e7bb79` (CI), `33fa8e4` (pages), `e9ef91c`/`9cc8edb` (action bumps).
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY).
+
+---
+
+## Post-1.0 — Access UX, global search & demo accounts · **v1.4.0** 🔎
+
+- **Date:** 2026-07-02
+- **Scope:** New-account experience, access visibility, working search, role
+  management, demo accounts — all user-reported issues fixed.
+- **Added:** pending-access screen for zero-role sign-ups; permission-filtered
+  sidebar; role badge (topbar + sidebar) linking to `/guide`; access guide with
+  role reference + demo credentials; Users & Roles "Edit access" editor
+  (audited, last-admin rails); `/api/search` + ⌘K command palette across 8
+  modules (org-scoped + permission-filtered).
+- **Data:** `baselsemsam@gmail.com` assigned **admin**; 11 Clerk demo users
+  created via Backend API (`skip_password_requirement`, then password set with
+  `skip_password_checks` — the HIBP breach check was hanging creation) and
+  seeded in Neon with one role each.
+- **Verified (browser, prod):** signed in as the Service Engineer demo account —
+  filtered nav (no Sales/Projects/Reports/Admin), SERVICE ENGINEER topbar badge,
+  dashboard + Service pages clean; search "difc" returned grouped results across
+  4 modules and Enter navigated to OPP-0001; guide + role editor live for admin.
+- **Commits:** `47f4fb8` (feature set), `ee08cd1` (guide password).
+- **CI:** green on all runs; 0 open PRs.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY).
