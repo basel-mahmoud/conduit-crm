@@ -23,8 +23,13 @@ export default function AppError({
       </div>
       <h2 className="mt-2 text-lg font-semibold">Something went wrong</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        An unexpected error occurred. You can retry, or head back to the
-        dashboard.
+        An unexpected error occurred. If you followed a link into a module, your
+        access level may not include it — check the{" "}
+        <Link href="/guide" className="text-primary underline-offset-2 hover:underline">
+          access guide
+        </Link>{" "}
+        for what your role can open. Otherwise you can retry, or head back to
+        the dashboard.
       </p>
       <div className="mt-5 flex items-center justify-center gap-2">
         <Button onClick={reset}>Try again</Button>

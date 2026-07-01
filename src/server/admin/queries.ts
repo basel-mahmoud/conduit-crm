@@ -10,6 +10,7 @@ export interface UserWithRoles {
   lastName: string | null;
   status: string;
   roles: string[];
+  roleKeys: string[];
 }
 
 export async function listUsersWithRoles(
@@ -28,19 +29,27 @@ export async function listUsersWithRoles(
     .orderBy(users.email);
 
   const assignments = await db
-    .select({ userId: userRoles.userId, roleName: roles.name })
+    .select({
+      userId: userRoles.userId,
+      roleName: roles.name,
+      roleKey: roles.key,
+    })
     .from(userRoles)
     .innerJoin(roles, eq(roles.id, userRoles.roleId))
     .where(eq(roles.orgId, orgId));
 
-  const byUser = new Map<string, string[]>();
+  const byUser = new Map<string, { names: string[]; keys: string[] }>();
   for (const a of assignments) {
-    const arr = byUser.get(a.userId) ?? [];
-    arr.push(a.roleName);
-    byUser.set(a.userId, arr);
+    const entry = byUser.get(a.userId) ?? { names: [], keys: [] };
+    entry.names.push(a.roleName);
+    entry.keys.push(a.roleKey);
+    byUser.set(a.userId, entry);
   }
 
-  return people.map((p) => ({ ...p, roles: byUser.get(p.id) ?? [] }));
+  return people.map((p) => {
+    const entry = byUser.get(p.id);
+    return { ...p, roles: entry?.names ?? [], roleKeys: entry?.keys ?? [] };
+  });
 }
 
 export interface RoleWithCount {

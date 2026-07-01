@@ -1,7 +1,9 @@
 import { requireAuthContext } from "@/server/auth/context";
 import { can } from "@/server/rbac/guard";
 import { ALL_PERMISSION_KEYS } from "@/server/rbac/permissions";
+import { SYSTEM_ROLES } from "@/server/rbac/roles";
 import { listRolesWithCounts, listUsersWithRoles } from "@/server/admin/queries";
+import { RoleEditor } from "./role-editor";
 
 export const metadata = { title: "Users & Roles" };
 export const dynamic = "force-dynamic";
@@ -68,6 +70,7 @@ export default async function AdminPage() {
                 <th className="px-5 py-2 font-medium">Email</th>
                 <th className="px-5 py-2 font-medium">Roles</th>
                 <th className="px-5 py-2 font-medium">Status</th>
+                <th className="px-5 py-2 text-right font-medium">Access</th>
               </tr>
             </thead>
             <tbody>
@@ -97,6 +100,16 @@ export default async function AdminPage() {
                   </td>
                   <td className="px-5 py-3">
                     <StatusBadge status={p.status} />
+                  </td>
+                  <td className="px-5 py-3 text-right">
+                    <RoleEditor
+                      userId={p.id}
+                      current={p.roleKeys}
+                      options={SYSTEM_ROLES.map((r) => ({
+                        key: r.key,
+                        name: r.name,
+                      }))}
+                    />
                   </td>
                 </tr>
               ))}
