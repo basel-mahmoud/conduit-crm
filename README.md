@@ -5,7 +5,7 @@ for a systems-integration & trading/contracting business operating across BMS,
 LCS, Home Automation, EMS, BTU metering, HVAC controls, ELV, trading, project
 contracting, AMC and PPM.
 
-**Live:** https://conduit-crm-eta.vercel.app · **Status:** 8 of 12 milestones on
+**Live:** https://conduit-crm-eta.vercel.app · **Status:** 9 of 12 milestones on
 production.
 
 Conduit covers the full lifecycle — lead → opportunity → technical quotation →
@@ -35,6 +35,9 @@ The complete core revenue chain is live and functional:
 - **Inventory & equipment** — a unified product/equipment catalog (SKU,
   manufacturer, model, cost/sell, lead time, specs), a stock ledger with
   **low-stock alerts**, and purchase orders that **receive into stock**.
+- **Reports & dashboards** — a **live** command center (real KPIs, pipeline by
+  stage, needs-attention, activity) and a reports center (win rate, AMC
+  profitability, SLA compliance, inventory valuation, won by system type).
 
 ## Stack
 
@@ -100,7 +103,7 @@ tests/                 # vitest suites
 - [x] **M6** — Project execution (control room, phases, milestones, snags)
 - [x] **M7** — AMC/PPM & service operations (contracts, assets, SLA tickets)
 - [x] **M8** — Inventory & equipment database (catalog, stock ledger, POs)
-- [ ] **M9** — Reports & dashboards
+- [x] **M9** — Reports & dashboards (real cross-module data)
 - [ ] **M10** — AI assistance features
 - [ ] **M11** — Hardening, testing, security, performance
 - [ ] **M12** — Production readiness & rollout
@@ -111,4 +114,4 @@ See [progress.md](progress.md), [roadmap.md](roadmap.md),
 [changelog.md](changelog.md), [deployment-log.md](deployment-log.md) and
 [PRODUCTION-HARDENING.md](PRODUCTION-HARDENING.md).
 
-Current: **M8 — Inventory & Equipment** ✅ · Next: **M9 — Reports & dashboards**.
+Current: **M9 — Reports & Dashboards** ✅ · Next: **M10 — AI assistance**.

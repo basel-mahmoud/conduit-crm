@@ -15,8 +15,8 @@ Living status tracker. Updated every milestone.
 | M6 | Project execution | ✅ Done |
 | M7 | AMC / PPM / service | ✅ Done |
 | M8 | Inventory & equipment | ✅ Done |
-| M9 | Reports & dashboards (real data) | ⏭ Next |
-| M10 | AI features | ◻ Planned |
+| M9 | Reports & dashboards (real data) | ✅ Done |
+| M10 | AI features | ⏭ Next |
 | M11 | Hardening, testing, security, perf | ◻ Planned |
 | M12 | Production rollout | ◻ Planned |
 

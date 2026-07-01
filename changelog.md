@@ -2,6 +2,25 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.9.0] — M9 Reports & Dashboards — 2026-06-30
+
+### Added
+- `reports/queries.ts` — real cross-module aggregations (org-scoped): pipeline,
+  win/loss, quotation & project status, AMC profitability, SLA compliance,
+  inventory valuation, won-by-system-type.
+- **Dashboard rewired to live data** — real KPIs (leads, open opps + weighted,
+  active quotes, won value, active contracts, open tickets + SLA breaches),
+  pipeline-by-stage bars, real needs-attention (breached SLAs, renewals ≤45d,
+  low stock) and recent activity. Removed the "illustrative" placeholder + fake
+  deltas.
+- **Reports center** (`/reports`, gated on `report.view`) — sales performance,
+  AMC/PPM profitability, service SLA, inventory valuation, quotation & project
+  status breakdowns, won by system type (CSS bar charts, no chart dependency).
+
+### Verified
+- Dashboard + reports render live data end-to-end (win rate 100%, SLA 100%,
+  inventory AED 134.4K at cost, won BTU AED 680K).
+
 ## [0.8.0] — M8 Inventory & Equipment — 2026-06-30
 
 ### Added

@@ -185,3 +185,23 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/inventory` + `/equipment` verified, 200).
 - **Next:** M9 — Reports & dashboards (real data).
+
+---
+
+## M9 — Reports & Dashboards
+
+- **Date:** 2026-07-01
+- **Scope:** Turn the illustrative dashboard into a live command center + add a
+  reports center. Read-only (no schema).
+- **Logic:** `src/modules/reports/queries.ts` — `dashboardSummary` and
+  `reportsData` run parallel org-scoped aggregations across leads, opportunities,
+  quotations, projects, contracts, tickets, products and activity.
+- **UI:** dashboard rewired to live KPIs + pipeline-by-stage + needs-attention +
+  activity (removed placeholder/fake deltas); `/reports` center (win rate, AMC
+  profitability, SLA compliance, inventory valuation, status breakdowns, won by
+  system type) with dependency-free CSS bar charts.
+- **Security/testing:** 34 Vitest tests; reports gated on `report.view`; verified
+  live vs Neon.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M10 — AI assistance features.

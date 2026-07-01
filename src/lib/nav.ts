@@ -58,7 +58,7 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Insight",
-    items: [{ label: "Reports", href: "/reports", icon: BarChart3, soon: true }],
+    items: [{ label: "Reports", href: "/reports", icon: BarChart3 }],
   },
   {
     label: "Admin",
