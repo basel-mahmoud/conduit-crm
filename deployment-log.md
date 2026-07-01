@@ -266,3 +266,26 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · 12/12 verified).
 - **Next:** — (project complete; go-live cutover is user-side per runbook).
+
+---
+
+## Post-1.0 — Real Authentication (Clerk cutover) · **v1.1.0** 🔐
+
+- **Date:** 2026-07-01
+- **Scope:** Replaced dev-auth with real Clerk authentication, live in production.
+- **Provisioned (autonomously via browser):** Clerk app **Conduit** (dev instance,
+  FAPI `relaxing-koi-53.clerk.accounts.dev`); pk/sk + sign-in/up + redirect env set
+  in `.env.local` and Vercel prod.
+- **Added:** `src/proxy.ts` (clerkMiddleware, public-route allowlist), ClerkProvider
+  in layout (key-gated), `/sign-in` + `/sign-up`, `UserButton` sign-out,
+  `/api/webhooks/clerk`, and JIT/email-link user sync (`src/server/auth/sync.ts`).
+  Owner row linked by email → admin on Google login.
+- **Fixed:** CSP now allows Clerk FAPI + Cloudflare Turnstile (M11 CSP blocked ClerkJS).
+- **Verified (browser, prod):** Google sign-in → SSO callback → **admin dashboard
+  with live data**; `/dashboard` redirects to `/sign-in` when signed out; landing +
+  `/api/health` stay public; lint + typecheck + 39 tests + build green.
+- **Commits:** `7172f2e` (auth wiring), `66188b2` (CSP fix).
+- **Optional remaining:** register Clerk webhook, restrict sign-ups, prod Clerk
+  instance + custom domain, `ANTHROPIC_API_KEY`, Sentry — see `docs/runbooks/go-live.md`.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · auth verified).

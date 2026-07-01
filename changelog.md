@@ -2,6 +2,27 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [1.1.0] — Real authentication (Clerk cutover) — 2026-07-01
+
+Switched from dev-auth to **real Clerk authentication**, live in production.
+
+### Added
+- Clerk app provisioned; keys wired in `.env.local` + Vercel prod.
+- `src/proxy.ts` (Next 16 middleware) protecting all routes except the public set;
+  `<ClerkProvider>` in the root layout (gated on keys); `/sign-in` + `/sign-up`
+  routes; `UserButton` sign-out in the topbar.
+- `/api/webhooks/clerk` (Svix-verified) plus JIT/email-link user provisioning
+  (`src/server/auth/sync.ts`) — a signed-in user is linked to an existing row by
+  email or created on first request; new users get no roles until an admin grants.
+
+### Fixed
+- CSP (`next.config.ts`) now allows the Clerk Frontend API + Cloudflare Turnstile;
+  the M11 CSP had blocked ClerkJS from loading.
+
+### Verified
+- End-to-end in the browser: Google sign-in → SSO callback → admin dashboard;
+  protected routes redirect to `/sign-in`; landing/health stay public.
+
 ## [1.0.0] — M12 Production Rollout — 2026-07-01
 
 **All 12 milestones complete.** Conduit reaches v1.0 — a full systems-integration

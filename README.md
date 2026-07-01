@@ -6,7 +6,8 @@ LCS, Home Automation, EMS, BTU metering, HVAC controls, ELV, trading, project
 contracting, AMC and PPM.
 
 **Live:** https://conduit-crm-eta.vercel.app · **Status:** v1.0.0 — all 12
-milestones shipped to production.
+milestones shipped to production, with **real Clerk authentication live** (Google +
+email sign-in, RBAC-gated).
 
 Conduit covers the full lifecycle — lead → opportunity → technical quotation →
 project execution → AMC/PPM & service — with the documents, approvals,

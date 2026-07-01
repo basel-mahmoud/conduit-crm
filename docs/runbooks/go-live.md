@@ -1,31 +1,32 @@
 # Go-Live Checklist
 
-Conduit is deployed and fully functional in **dev-auth mode** (the auth context
-resolves the seeded owner/admin). This runbook lists the steps to cut over to a
-real, multi-user production launch.
+Conduit is deployed and running with **real Clerk authentication** (see §1).
+This runbook records what's done and the optional hardening that remains.
 
-## 1. Authentication — Clerk cutover (primary task)
+## 1. Authentication — Clerk cutover ✅ DONE
 
-The auth **context** already uses Clerk when keys are present
-(`src/server/auth/context.ts`, `clerkEnabled`). To finish the wiring:
+Real Clerk auth is wired and **verified end-to-end in production** (owner signs in
+with Google → admin dashboard). What's in place:
 
-1. Create a Clerk application (dashboard.clerk.com), enable **Organizations**.
-2. Set env (local `.env.local` **and** Vercel → Project → Environment Variables):
-   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-   - `CLERK_SECRET_KEY`
-   - `CLERK_WEBHOOK_SECRET`
-3. Add the Clerk mounting (gated on `clerkEnabled` so dev-auth still works):
-   - Wrap the root layout children in `<ClerkProvider>`.
-   - Add `proxy.ts` (Next 16 middleware) running `clerkMiddleware()` to protect
-     `/(app)` routes.
-   - Add `/sign-in` and `/sign-up` routes.
-   - Add a Clerk **webhook** route (`/api/webhooks/clerk`, verified with `svix`)
-     that upserts users into the `users` table (id = Clerk user id) and assigns a
-     default role via `user_roles`.
-4. Seed the org's roles for real users (`npm run db:seed` already seeds the 11
-   system roles + permission matrix; assign roles per user in **Admin → Users &
-   Roles**).
-5. Once verified, dev-auth auto-disables (it only runs when Clerk env is absent).
+- Clerk application **Conduit** (dev instance, Frontend API
+  `relaxing-koi-53.clerk.accounts.dev`); keys in `.env.local` and Vercel prod
+  (`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, sign-in/up URLs, and
+  `/dashboard` fallback redirects).
+- `src/proxy.ts` (Next 16 middleware) runs `clerkMiddleware()` and protects every
+  route except the public set (`/`, `/sign-in`, `/sign-up`, `/api/health`,
+  `/api/webhooks/*`). Gated on keys, so dev-auth still works when keys are absent.
+- `<ClerkProvider>` in the root layout; `/sign-in` + `/sign-up` catch-all routes;
+  `UserButton` (sign-out) in the topbar.
+- Identity resolution (`src/server/auth/context.ts` + `src/server/auth/sync.ts`):
+  fast-path by Clerk id, else **link by email** to an existing row (the owner), else
+  **JIT-provision** a new user with **no roles** (an admin grants access).
+- The CSP in `next.config.ts` allows the Clerk Frontend API + Cloudflare Turnstile
+  (required — the original CSP blocked ClerkJS).
+
+**Optional follow-ups:** register the `/api/webhooks/clerk` endpoint in Clerk (set
+`CLERK_WEBHOOK_SIGNING_SECRET`) for real-time user sync; restrict sign-ups
+(Clerk → Restrictions) to invite-only; promote to a Clerk **production** instance
+when moving to a custom domain (add its host to the CSP).
 
 ## 2. Environment
 - Confirm `DATABASE_URL` / `DATABASE_URL_UNPOOLED` on Vercel (already set).
