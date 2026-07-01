@@ -224,5 +224,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Known limitations:** email send integration (Resend) + AI risk/forecast/
   sentiment/summary features are future scope; runs heuristic without a key.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · 200).
 - **Next:** M11 — Hardening, testing, security, performance.
