@@ -56,7 +56,7 @@ export function AiAssistPanel({
         </h3>
         {data && (
           <span className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
-            {data.source === "claude" ? "Claude" : "heuristic"}
+            {data.source === "gemini" ? "Gemini" : "heuristic"}
           </span>
         )}
       </div>

@@ -30,7 +30,7 @@ when moving to a custom domain (add its host to the CSP).
 
 ## 2. Environment
 - Confirm `DATABASE_URL` / `DATABASE_URL_UNPOOLED` on Vercel (already set).
-- Optional: `ANTHROPIC_API_KEY` (+ `AI_MODEL`) to switch AI from heuristic → Claude.
+- Optional: `GEMINI_API_KEY` (+ `AI_MODEL`) to switch AI from heuristic → Gemini.
 - Rotate the seeded Neon credentials before real data; keep secrets out of the repo.
 
 ## 3. Data

@@ -3,7 +3,7 @@ import { and, eq, getTableColumns, isNull } from "drizzle-orm";
 import { db } from "@/db";
 import { accounts, activityEvents, leads, opportunities } from "@/db/schema";
 import { writeAudit } from "@/server/audit/audit";
-import { callClaude, extractJson } from "@/server/ai/gateway";
+import { callModel, extractJson } from "@/server/ai/gateway";
 import { requirePermission, type AuthContext } from "@/server/rbac/guard";
 import { STAGE_META, type OppStageKey } from "@/modules/opportunities/labels";
 import {
@@ -21,14 +21,14 @@ export interface OppAssist {
   rationale: string;
   nextAction: string;
   email: string;
-  source: "claude" | "heuristic";
+  source: "gemini" | "heuristic";
 }
 
 export interface LeadAssist {
   recommendation: string;
   nextAction: string;
   email: string;
-  source: "claude" | "heuristic";
+  source: "gemini" | "heuristic";
 }
 
 /* ------------------------------- Opportunity ------------------------------ */
@@ -114,7 +114,7 @@ export async function aiOpportunityAssist(
 - Competitor: ${opp.competitor ?? "n/a"}
 
 Return STRICT JSON only: {"nextAction":"one concrete next step (<=160 chars)","rationale":"2-3 sentences on deal health and key risks","email":"a short professional follow-up email to the customer (<=140 words), no placeholders or brackets"}`;
-  const raw = await callClaude(SYSTEM, prompt);
+  const raw = await callModel(SYSTEM, prompt);
   if (raw) {
     const parsed = extractJson<{
       nextAction?: string;
@@ -125,7 +125,7 @@ Return STRICT JSON only: {"nextAction":"one concrete next step (<=160 chars)","r
       result.nextAction = parsed.nextAction;
       result.rationale = parsed.rationale ?? result.rationale;
       result.email = parsed.email;
-      result.source = "claude";
+      result.source = "gemini";
     }
   }
 
@@ -214,7 +214,7 @@ export async function aiLeadAssist(
 - Location: ${lead.projectLocation ?? "n/a"}
 
 Return STRICT JSON only: {"recommendation":"1-2 sentence assessment and strategy","nextAction":"one concrete next step (<=160 chars)","email":"a short professional outreach email (<=130 words), no placeholders or brackets"}`;
-  const raw = await callClaude(SYSTEM, prompt);
+  const raw = await callModel(SYSTEM, prompt);
   if (raw) {
     const parsed = extractJson<{
       recommendation?: string;
@@ -225,7 +225,7 @@ Return STRICT JSON only: {"recommendation":"1-2 sentence assessment and strategy
       result.recommendation = parsed.recommendation ?? result.recommendation;
       result.nextAction = parsed.nextAction;
       result.email = parsed.email;
-      result.source = "claude";
+      result.source = "gemini";
     }
   }
 

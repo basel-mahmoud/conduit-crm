@@ -27,7 +27,7 @@ UI quality, with Neon and Clerk as mandated platform choices.
 - **Zod** for shared client/server validation; **TanStack Query/Table** for data
   UX; **Radix** primitives heavily restyled; **Motion/CSS** for animation;
   **@react-pdf** for quotation PDFs; **Resend** email; **Upstash** rate-limit/
-  cache; **Anthropic Claude** behind an AI gateway; **Sentry** observability.
+  cache; **Google Gemini** behind an AI gateway; **Sentry** observability.
 
 ## Consequences
 

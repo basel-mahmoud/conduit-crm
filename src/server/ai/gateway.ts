@@ -1,43 +1,56 @@
 /**
- * AI gateway — provider abstraction over Anthropic Claude.
+ * AI gateway — provider abstraction over Google Gemini.
  *
- * When `ANTHROPIC_API_KEY` is set, features call Claude; otherwise the caller's
+ * When `GEMINI_API_KEY` is set, features call Gemini; otherwise the caller's
  * deterministic heuristic fallback is used, so every AI feature is functional
  * (and honest) without a key and upgrades transparently when one is added.
  *
  * Governance: prompts are NOT logged (privacy); callers log only the feature +
  * subject + source to the audit trail. All output is suggestion-only.
  */
-export const aiEnabled = !!process.env.ANTHROPIC_API_KEY;
+const GEMINI_API_KEY =
+  process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || "";
 
-const MODEL = process.env.AI_MODEL || "claude-haiku-4-5-20251001";
+export const aiEnabled = !!GEMINI_API_KEY;
 
-export async function callClaude(
+// gemini-2.5-flash is free-tier eligible; thinking is disabled below so the
+// output-token budget is spent on the answer, not on hidden reasoning.
+const MODEL = process.env.AI_MODEL || "gemini-2.5-flash";
+
+interface GeminiResponse {
+  candidates?: { content?: { parts?: { text?: string }[] } }[];
+}
+
+/** Call Gemini with a system instruction + user prompt. Returns text or null. */
+export async function callModel(
   system: string,
   prompt: string,
   maxTokens = 800,
 ): Promise<string | null> {
   if (!aiEnabled) return null;
   try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "x-api-key": process.env.ANTHROPIC_API_KEY as string,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-goog-api-key": GEMINI_API_KEY,
+        },
+        body: JSON.stringify({
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          systemInstruction: { parts: [{ text: system }] },
+          generationConfig: {
+            maxOutputTokens: maxTokens,
+            temperature: 0.2,
+            thinkingConfig: { thinkingBudget: 0 },
+          },
+        }),
       },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: maxTokens,
-        system,
-        messages: [{ role: "user", content: prompt }],
-      }),
-    });
+    );
     if (!res.ok) return null;
-    const json = (await res.json()) as {
-      content?: { text?: string }[];
-    };
-    const text = json?.content?.[0]?.text;
+    const json = (await res.json()) as GeminiResponse;
+    const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
     return typeof text === "string" ? text : null;
   } catch {
     return null;
