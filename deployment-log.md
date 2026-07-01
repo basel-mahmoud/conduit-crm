@@ -183,5 +183,5 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **Known limitations:** sales orders & multi-warehouse deferred; datasheet is a
   URL (file storage lands with the Document Center).
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
-- **Vercel:** _deploying…_
+- **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/inventory` + `/equipment` verified, 200).
 - **Next:** M9 — Reports & dashboards (real data).
