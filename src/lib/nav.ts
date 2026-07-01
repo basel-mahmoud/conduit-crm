@@ -53,7 +53,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Inventory", href: "/inventory", icon: Boxes },
       { label: "Equipment", href: "/equipment", icon: Cpu },
-      { label: "Documents", href: "/documents", icon: FileBox, soon: true },
+      { label: "Documents", href: "/documents", icon: FileBox },
     ],
   },
   {
@@ -64,7 +64,7 @@ export const navGroups: NavGroup[] = [
     label: "Admin",
     items: [
       { label: "Users & Roles", href: "/admin", icon: KeyRound },
-      { label: "Settings", href: "/settings", icon: Settings, soon: true },
+      { label: "Settings", href: "/settings", icon: Settings },
     ],
   },
 ];
