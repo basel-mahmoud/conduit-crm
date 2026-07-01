@@ -7,6 +7,7 @@ import {
   ProjectTypeBadge,
   StageBadge,
 } from "@/components/pipeline/badges";
+import { AiAssistPanel } from "@/components/ai/assist-panel";
 import { formatAED, formatDate } from "@/lib/format";
 import {
   deleteOpportunityAction,
@@ -157,7 +158,8 @@ export default async function OpportunityDetailPage({
           )}
         </section>
 
-        <aside>
+        <aside className="space-y-6">
+          <AiAssistPanel kind="opportunity" id={opp.id} />
           <section className="rounded-lg border border-border bg-card p-5">
             <h3 className="text-sm font-semibold">Activity</h3>
             <ol className="mt-3 space-y-3">

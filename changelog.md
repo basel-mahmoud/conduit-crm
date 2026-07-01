@@ -2,6 +2,27 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [0.10.0] — M10 AI Assistance — 2026-07-01
+
+### Added
+- **AI gateway** (`src/server/ai/gateway.ts`) — provider abstraction over
+  Anthropic Claude; used when `ANTHROPIC_API_KEY` is set, deterministic
+  heuristics otherwise (features work + upgrade transparently).
+- **Opportunity assist** — health score, deal assessment, next-best-action, and a
+  context-aware draft follow-up email.
+- **Lead assist** — qualification recommendation, next action, and a draft
+  outreach email.
+- AI panel wired into the opportunity + lead detail pages (generate / regenerate /
+  copy), with a source badge and a "review before sending" note.
+
+### Governance
+- Suggestion-only / human-in-the-loop; RBAC-scoped; **audited** (`ai.assist`)
+  with feature + source but **not** prompt content (redaction). See `docs/ai.md`.
+
+### Verified
+- Panel scores an opportunity (25/100), assesses it, recommends a next step and
+  drafts a contextual email — all from live data, no console errors.
+
 ## [0.9.0] — M9 Reports & Dashboards — 2026-06-30
 
 ### Added

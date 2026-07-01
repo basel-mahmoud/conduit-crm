@@ -205,3 +205,24 @@ One entry per milestone deploy. Authored by Basel Mahmoud.
 - **GitHub:** https://github.com/basel-mahmoud/conduit-crm
 - **Vercel:** https://conduit-crm-eta.vercel.app (production, READY · `/dashboard` + `/reports` live, 200).
 - **Next:** M10 — AI assistance features.
+
+---
+
+## M10 — AI Assistance
+
+- **Date:** 2026-07-01
+- **Scope:** Governed, explainable AI assistance across sales.
+- **Logic:** `src/server/ai/gateway.ts` (Anthropic Claude + heuristic fallback,
+  `extractJson`); `src/modules/ai/assist.ts` (opportunity + lead assist — score,
+  assessment, next action, draft email) with deterministic fallbacks.
+- **UI:** `AiAssistPanel` on opportunity + lead detail (generate/regenerate/copy,
+  source badge, governance note).
+- **Governance:** suggestion-only + human-in-loop; RBAC-scoped; audited
+  (`ai.assist`) without prompt content; `docs/ai.md`. Runs in heuristic mode until
+  `ANTHROPIC_API_KEY` is set (then Claude).
+- **Security/testing:** 34 Vitest tests; verified live (heuristic mode).
+- **Known limitations:** email send integration (Resend) + AI risk/forecast/
+  sentiment/summary features are future scope; runs heuristic without a key.
+- **GitHub:** https://github.com/basel-mahmoud/conduit-crm
+- **Vercel:** _deploying…_
+- **Next:** M11 — Hardening, testing, security, performance.
