@@ -47,10 +47,30 @@ async function buildContext(userId: string): Promise<AuthContext | null> {
 /** Memoised per request. */
 export const getAuthContext = cache(async (): Promise<AuthContext | null> => {
   if (clerkEnabled) {
-    const { auth } = await import("@clerk/nextjs/server");
+    const { auth, currentUser } = await import("@clerk/nextjs/server");
     const { userId } = await auth();
     if (!userId) return null;
-    return buildContext(userId);
+
+    // Fast path: user already linked/provisioned by Clerk id.
+    const linked = await buildContext(userId);
+    if (linked) return linked;
+
+    // First request for this identity — link by email or JIT-provision.
+    const cu = await currentUser();
+    if (!cu) return null;
+    const { resolveUser } = await import("@/server/auth/sync");
+    const resolvedId = await resolveUser({
+      id: cu.id,
+      email:
+        cu.primaryEmailAddress?.emailAddress ??
+        cu.emailAddresses[0]?.emailAddress ??
+        null,
+      firstName: cu.firstName,
+      lastName: cu.lastName,
+      avatarUrl: cu.imageUrl,
+    });
+    if (!resolvedId) return null;
+    return buildContext(resolvedId);
   }
 
   // Dev fallback: first active seeded user (the owner/admin).

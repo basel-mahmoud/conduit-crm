@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+
+const clerkEnabled =
+  !!process.env.CLERK_SECRET_KEY &&
+  !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +33,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+  const tree = (
     <html
       lang="en"
       suppressHydrationWarning
@@ -46,5 +51,17 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
+  );
+
+  // Only mount Clerk when configured, so dev-auth mode renders without keys.
+  return clerkEnabled ? (
+    <ClerkProvider
+      afterSignOutUrl="/"
+      appearance={{ cssLayerName: "clerk" }}
+    >
+      {tree}
+    </ClerkProvider>
+  ) : (
+    tree
   );
 }

@@ -2,9 +2,12 @@
 
 import { usePathname } from "next/navigation";
 import { Bell, Search } from "lucide-react";
+import { UserButton } from "@clerk/nextjs";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { navGroups } from "@/lib/nav";
+
+const clerkEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 function usePageTitle() {
   const pathname = usePathname();
@@ -41,6 +44,10 @@ export function Topbar() {
       </button>
 
       <ThemeToggle />
+
+      {clerkEnabled && (
+        <UserButton appearance={{ elements: { avatarBox: "size-8" } }} />
+      )}
     </header>
   );
 }
