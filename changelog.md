@@ -2,6 +2,17 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [1.5.0] — Demo disclaimers & legal notice — 2026-07-02
+
+### Added
+- **Always-visible demo banner** on every app screen: "all data shown is fictional
+  sample data for evaluation only," linking to the disclaimer.
+- **Public `/legal` page** — Disclaimer & Terms of Use: demonstration software,
+  fictional sample data, no professional advice, do-not-enter-real-data, "as is"
+  with no warranty, limitation of liability, third-party services, confidentiality.
+- Disclaimer notices + `/legal` links on the landing footer, sign-in, sign-up, and
+  the guide's demo-accounts section.
+
 ## [1.4.0] — Access UX, global search & demo accounts — 2026-07-02
 
 ### Added
