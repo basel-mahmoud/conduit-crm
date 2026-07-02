@@ -5,9 +5,16 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    # Major bumps repeatedly break the toolchain (e.g. ESLint past the react
+    # plugin's rule API), so only take minor/patch updates automatically.
+    # Majors can still be reviewed/applied deliberately.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       all-dependencies:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
