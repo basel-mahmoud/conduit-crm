@@ -244,12 +244,29 @@ export default function Home() {
 
       {/* Footer title block */}
       <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-6 py-6 font-mono text-[11px] text-muted-foreground">
-          <span>© {new Date().getFullYear()} Conduit CRM</span>
-          <span className="hidden sm:inline">
-            Neon · Clerk · Next.js · Vercel
-          </span>
-          <span>REV 0.1</span>
+        <div className="mx-auto max-w-6xl px-6 py-6">
+          <p className="max-w-3xl text-[12px] leading-relaxed text-muted-foreground">
+            <span className="font-semibold text-warning">Demonstration build.</span>{" "}
+            All companies, people, figures and documents shown are fictional
+            sample data for evaluation only — not real, and not for making
+            business decisions. See the{" "}
+            <Link
+              href="/legal"
+              className="underline underline-offset-2 hover:text-foreground"
+            >
+              disclaimer &amp; terms of use
+            </Link>
+            .
+          </p>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-4 font-mono text-[11px] text-muted-foreground">
+            <span>© {new Date().getFullYear()} Conduit CRM</span>
+            <span className="hidden sm:inline">
+              Neon · Clerk · Next.js · Vercel
+            </span>
+            <Link href="/legal" className="hover:text-foreground">
+              Disclaimer
+            </Link>
+          </div>
         </div>
       </footer>
     </div>

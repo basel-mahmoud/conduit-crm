@@ -151,6 +151,11 @@ export default async function GuidePage() {
             {TEST_PASSWORD}
           </span>{" "}
           — these are Clerk development test accounts; no real mailbox exists.
+          These accounts and all data shown are for demonstration only; see the{" "}
+          <a href="/legal" className="text-primary underline-offset-2 hover:underline">
+            disclaimer
+          </a>
+          .
         </div>
         <div className="overflow-x-auto border-t border-border">
           <table className="w-full text-sm">

@@ -14,6 +14,7 @@ const clerkEnabled =
 
 const isPublicRoute = createRouteMatcher([
   "/",
+  "/legal",
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/api/health",

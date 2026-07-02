@@ -16,6 +16,14 @@ export default function SignInPage() {
           </h1>
         </div>
         <SignIn />
+        <p className="max-w-sm text-center text-[11px] leading-relaxed text-muted-foreground">
+          Demonstration environment with fictional sample data. Do not enter real
+          or confidential information. By continuing you accept the{" "}
+          <a href="/legal" className="underline underline-offset-2 hover:text-foreground">
+            disclaimer &amp; terms of use
+          </a>
+          .
+        </p>
       </div>
     </main>
   );
