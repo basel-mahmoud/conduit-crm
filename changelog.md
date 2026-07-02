@@ -2,6 +2,21 @@
 
 All notable changes to Conduit. Format follows *Keep a Changelog*; newest first.
 
+## [1.5.1] — Notifications & search-close fixes — 2026-07-02
+
+### Added
+- **Working notifications** — the bell now opens a dropdown of real,
+  permission-scoped alerts (past-SLA tickets, low-stock items, pending discount
+  approvals, contracts due for renewal) via `/api/notifications`, with an unread
+  badge count. Each role sees only alerts for the modules it can access, so it
+  works for every account type.
+
+### Fixed
+- **Global search now closes reliably** on outside-click and Escape. The palette
+  was rendered inside the `backdrop-blur` header, which became the containing
+  block for its `position: fixed` overlay and clipped it to the header strip;
+  it's now portaled to `document.body` with a document-level Escape handler.
+
 ## [1.5.0] — Demo disclaimers & legal notice — 2026-07-02
 
 ### Added
