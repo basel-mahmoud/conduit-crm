@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { CornerDownLeft, Loader2, Search } from "lucide-react";
 
@@ -75,6 +76,18 @@ function PaletteDialog({ onClose }: { onClose: () => void }) {
     [onClose, router],
   );
 
+  // Close on Escape from anywhere (document-level, independent of focus).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
   // Keyboard navigation inside the dialog.
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") onClose();
@@ -90,10 +103,12 @@ function PaletteDialog({ onClose }: { onClose: () => void }) {
     }
   };
 
+  if (typeof document === "undefined") return null;
+
   let idx = -1;
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 px-4 pt-[12vh] backdrop-blur-[2px]"
+      className="fixed inset-0 z-[100] flex items-start justify-center bg-black/50 px-4 pt-[12vh] backdrop-blur-[2px]"
       onMouseDown={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
@@ -168,6 +183,7 @@ function PaletteDialog({ onClose }: { onClose: () => void }) {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

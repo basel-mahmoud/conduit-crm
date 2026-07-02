@@ -3,11 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Search, ShieldCheck } from "lucide-react";
+import { Search, ShieldCheck } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { CommandPalette } from "@/components/shell/command-palette";
+import { NotificationsMenu } from "@/components/shell/notifications-menu";
 import { navGroups } from "@/lib/nav";
 
 const clerkEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
@@ -90,13 +91,7 @@ export function Topbar({
         </Link>
       )}
 
-      <button
-        aria-label="Notifications"
-        className="relative grid size-9 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-      >
-        <Bell className="size-4" />
-        <span className="absolute right-2 top-2 size-1.5 rounded-full bg-primary" />
-      </button>
+      <NotificationsMenu />
 
       <ThemeToggle />
 
