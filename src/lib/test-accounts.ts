@@ -3,11 +3,11 @@
  *
  * These exist only while Conduit runs on the Clerk DEVELOPMENT instance.
  * They use Clerk's test-email convention (`…+clerk_test@example.com`) — no
- * real mailbox exists and all of them share one demo password.
+ * real mailbox exists. The shared demo password is NOT stored here (that would
+ * expose it in the public repo) — it lives only in the `DEMO_ACCOUNT_PASSWORD`
+ * server env var and is shown in-app on the Guide to administrators only.
  * Remove them (and this file) before a real production launch.
  */
-export const TEST_PASSWORD = "Conduit-Demo-2026";
-
 export interface TestAccount {
   email: string;
   roleKey: string;

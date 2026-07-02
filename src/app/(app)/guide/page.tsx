@@ -1,7 +1,7 @@
 import { KeyRound, ShieldCheck } from "lucide-react";
 
 import { navGroups } from "@/lib/nav";
-import { TEST_ACCOUNTS, TEST_PASSWORD } from "@/lib/test-accounts";
+import { TEST_ACCOUNTS } from "@/lib/test-accounts";
 import {
   getCurrentUserDisplay,
   requireAuthContext,
@@ -22,6 +22,11 @@ export default async function GuidePage() {
     .map((k) => SYSTEM_ROLE_BY_KEY[k as RoleKey]?.name ?? k)
     .join(", ");
   const canViewCosts = can(ctx, "quotation.cost.view");
+
+  // The shared demo password lives only in a server env var, and is revealed
+  // to administrators only — never shipped in the repo or shown to other users.
+  const demoPassword = process.env.DEMO_ACCOUNT_PASSWORD ?? "";
+  const showPassword = ctx.isAdmin && demoPassword.length > 0;
 
   const modules = navGroups
     .flatMap((g) => g.items)
@@ -147,9 +152,15 @@ export default async function GuidePage() {
         <div className="px-5 py-3 text-sm text-muted-foreground">
           Sign out, then sign in with one of these emails and the shared demo
           password{" "}
-          <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[12px] text-foreground">
-            {TEST_PASSWORD}
-          </span>{" "}
+          {showPassword ? (
+            <span className="rounded bg-muted px-1.5 py-0.5 font-mono text-[12px] text-foreground">
+              {demoPassword}
+            </span>
+          ) : (
+            <span className="text-foreground">
+              (visible to administrators only — ask the workspace owner)
+            </span>
+          )}{" "}
           — these are Clerk development test accounts; no real mailbox exists.
           These accounts and all data shown are for demonstration only; see the{" "}
           <a href="/legal" className="text-primary underline-offset-2 hover:underline">
@@ -173,7 +184,9 @@ export default async function GuidePage() {
                   <td className="px-5 py-2.5 font-mono text-[12px] text-muted-foreground">
                     {a.email}
                   </td>
-                  <td className="px-5 py-2.5 font-mono text-[12px]">{TEST_PASSWORD}</td>
+                  <td className="px-5 py-2.5 font-mono text-[12px]">
+                    {showPassword ? demoPassword : "••••••••"}
+                  </td>
                 </tr>
               ))}
             </tbody>
